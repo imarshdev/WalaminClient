@@ -49,9 +49,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <CiDeliveryTruck size={34} color="#ffc107" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#333333" }}>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 Delivery
-              </h2>
+              </p>
             </Link>
           </TouchableOpacity>
 
@@ -59,9 +59,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#1a1d23" }}>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 Express
-              </h2>
+              </p>
             </Link>
           </TouchableOpacity>
 
@@ -69,9 +69,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSchedule size={34} color="4caf50" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#333333" }}>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 Schedule
-              </h2>
+              </p>
             </Link>
           </TouchableOpacity>
 
@@ -79,7 +79,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <img src={dine} style={{ width: "30px" }} />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Dine</h2>{" "}
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>Dine</p>{" "}
             </Link>
           </TouchableOpacity>
 
@@ -87,7 +87,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <img src={shopping} style={{ width: "30px" }} />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Shopping</h2>{" "}
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>Shopping</p>{" "}
             </Link>
           </TouchableOpacity>
 
@@ -95,9 +95,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSell size={34} color="#ff5a5f" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 Auction House
-              </h2>{" "}
+              </p>{" "}
             </Link>
           </TouchableOpacity>
 
@@ -105,9 +105,9 @@ function Home() {
           <TouchableOpacity id="service_item" style={{ width: "65%" }}>
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="pink" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#1a1d23" }}>
+              <p style={{ fontSize: 14, margin: "1rem 0"}}>
                 All female ride 🤩
-              </h2>
+              </p>
             </Link>
           </TouchableOpacity>
 
@@ -149,7 +149,9 @@ export function Navigator() {
         <Link to="/services">
           <span className="icon_button">
             <FaServicestack color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>All Services</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>
+              All Services
+            </span>
           </span>
         </Link>
       </TouchableOpacity>
@@ -159,7 +161,7 @@ export function Navigator() {
         <Link to="/account">
           <span className="icon_button">
             <GiFullMotorcycleHelmet color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>Profile</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>Profile</span>
           </span>
         </Link>
       </TouchableOpacity>

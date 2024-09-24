@@ -23,7 +23,7 @@ export function Navigator() {
         <Link to="/">
           <span className="icon_button">
             <FaHome color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>Home</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>Home</span>
           </span>
         </Link>
       </TouchableOpacity>
@@ -33,7 +33,9 @@ export function Navigator() {
         <Link to="/services">
           <span className="icon_button">
             <FaServicestack color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>All Services</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>
+              All Services
+            </span>
           </span>
         </Link>
       </TouchableOpacity>

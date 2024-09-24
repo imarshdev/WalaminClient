@@ -268,7 +268,7 @@ export function Navigator() {
         <Link to="/">
           <span className="icon_button">
             <FaHome color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>Home</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>Home</span>
           </span>
         </Link>
       </TouchableOpacity>
@@ -288,7 +288,7 @@ export function Navigator() {
         <Link to="/account">
           <span className="icon_button">
             <GiFullMotorcycleHelmet color="#fff" size={24} />
-            <span style={{ fontSize: 12 }}>Profile</span>
+            <span style={{ fontSize: 12, color: "darkgreen" }}>Profile</span>
           </span>
         </Link>
       </TouchableOpacity>
