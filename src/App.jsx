@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -14,6 +14,8 @@ import AllServices from "./pages/services.jsx";
 import Account from "./pages/account.jsx";
 import Signin from "./pages/signin.jsx";
 import Signup from "./pages/signup.jsx";
+import RideRequestForm from "./components/RideRequestForm.jsx";
+import DriverRideList from "./components/DriverRideList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,8 +43,19 @@ const router = createBrowserRouter([
     element: <Signup />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/ride-request",
+    element: <RideRequestForm />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/driver-rides",
+    element: <DriverRideList />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 function App() {
+
   return (
     <>
       <RouterProvider router={router} />

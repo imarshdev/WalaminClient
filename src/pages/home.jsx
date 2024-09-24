@@ -2,10 +2,12 @@ import React from "react";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
 import "../css/home.css"
+import dine from "../assets/dine.svg"
+import shopping from "../assets/shopping.svg";
 import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
-import { MdSchedule } from "react-icons/md";
+import { MdSchedule, MdSell } from "react-icons/md";
 import { RiAuctionLine } from "react-icons/ri";
 
 function Home() {
@@ -42,7 +44,7 @@ function Home() {
 
           {/* express ride button */}
           <TouchableOpacity id="service_item">
-            <Link id="link_item">
+            <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
               <p style={{ fontSize: 12, color: "#1a1d23" }}>Express Ride</p>
             </Link>
@@ -59,7 +61,7 @@ function Home() {
           {/* dine button */}
           <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
             <Link id="link_item">
-              <FaServicestack size={34} color="limegreen" />
+              <img src={dine} style={{ width: "30px" }} />
               <p style={{ fontSize: 12 }}>Dine</p>{" "}
             </Link>
           </TouchableOpacity>
@@ -67,7 +69,7 @@ function Home() {
           {/* shopping button */}
           <TouchableOpacity id="service_item">
             <Link id="link_item">
-              <FaServicestack size={34} color="limegreen" />
+              <img src={shopping} style={{ width: "30px" }} />
               <p style={{ fontSize: 12 }}>Shopping</p>{" "}
             </Link>
           </TouchableOpacity>
@@ -75,7 +77,7 @@ function Home() {
           {/* auction house button */}
           <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
             <Link id="link_item">
-              <RiAuctionLine size={34} color="limegreen" />
+              <MdSell size={34} color="#ff5a5f" />
               <p style={{ fontSize: 12 }}>Auction House</p>{" "}
             </Link>
           </TouchableOpacity>

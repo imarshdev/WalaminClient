@@ -54,7 +54,7 @@ body {
   box-sizing: border-box;
   display: flex;
   place-items: center;
-  background-color: #fff;
+  background-color: #eff2fb;
 }
 
 h1 {
@@ -95,6 +95,9 @@ input {
   border: solid transparent 2px !important;
   font-size: 16px;
 }
+.input-cover {
+  border-bottom: solid 0.5px limegreen;
+}
 input:focus {
   outline: none;
 }
@@ -119,9 +122,20 @@ textarea {
   align-items: center;
   flex-direction: column;
 }
+.container2 {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
 
 .navigator {
-  position: absolute;
+  position: fixed;
   bottom: 30px;
   width: 95%;
   height: 4rem;
@@ -131,7 +145,7 @@ textarea {
   border-radius: 50px;
   background-color: limegreen;
   -webkit-box-shadow: 0 5px 5px rgba(160, 163, 189, 0.918);
-  box-shadow: 0 5px 5px rgba(0, 100, 0, 0.637);
+  box-shadow: 1px 1px 5px rgb(0, 100, 0);
 }
 .icon_button {
   display: flex;
