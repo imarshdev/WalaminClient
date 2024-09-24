@@ -33,7 +33,7 @@ function Home() {
       <div className="mid_details">
         <div className="mid_details_upper">
           {/* delivery button */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <CiDeliveryTruck size={34} color="#ffc107" />
               <p style={{ fontSize: 12, color: "#333333" }}>
@@ -51,7 +51,7 @@ function Home() {
           </TouchableOpacity>
 
           {/* schedule ride button */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSchedule size={34} color="4caf50" />
               <p style={{ fontSize: 12, color: "#333333" }}>Schedule ride</p>
@@ -59,7 +59,7 @@ function Home() {
           </TouchableOpacity>
 
           {/* dine button */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <img src={dine} style={{ width: "30px" }} />
               <p style={{ fontSize: 12 }}>Dine</p>{" "}
@@ -75,7 +75,7 @@ function Home() {
           </TouchableOpacity>
 
           {/* auction house button */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSell size={34} color="#ff5a5f" />
               <p style={{ fontSize: 12 }}>Auction House</p>{" "}
@@ -83,7 +83,7 @@ function Home() {
           </TouchableOpacity>
 
           {/* send money button */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <FaServicestack size={34} color="limegreen" />
               <p style={{ fontSize: 12 }}>Send Money</p>{" "}
@@ -99,7 +99,7 @@ function Home() {
           </TouchableOpacity>
 
           {/* button to all services page */}
-          <TouchableOpacity id="service_item" style={{ marginTop: "10px" }}>
+          <TouchableOpacity id="service_item">
             <Link id="link_item">
               <FaServicestack size={34} color="limegreen" />
               <p style={{ fontSize: 12 }}>All Services</p>{" "}
