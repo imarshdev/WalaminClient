@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
 import "../css/home.css";
@@ -8,27 +8,90 @@ import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { MdSchedule, MdSell } from "react-icons/md";
-import { RiAuctionLine } from "react-icons/ri";
 
 function Home() {
+  const [greeting, setGreeting] = useState();
+  const [currentTimeString, setCurrentTimeString] = useState(new Date());
+
+  // this is simply getting the current time at all times to ensure proper greeting of the current user
+  useEffect(() => {
+    const currentTime = new Date().getHours();
+    let time;
+
+    if (currentTime < 12) {
+      time = "Good morning, ";
+    } else if (currentTime < 18) {
+      time = "Good afternoon, ";
+    } else {
+      time = "Good evening, ";
+    }
+    setGreeting(time);
+  });
+
+  // this is a timer to make sure the greeting is updated in real time
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTimeString(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  });
+
+  const timeOptions = { hour: "2-digit", minute: "2-digit" };
+  const dateOptions = { weekday: "short", month: "short", day: "2-digit" };
+
+  const formattedTime = currentTimeString.toLocaleTimeString(
+    "en-US",
+    timeOptions
+  );
+  const formattedDate = currentTimeString.toLocaleDateString(
+    "en-US",
+    dateOptions
+  );
+
   return (
     <div className="container">
       <div className="topper">
-        <div className="upper_topper">
-          <TouchableOpacity id="user_icon">
-            <div className="user_icon one">
-              <FaUserAstronaut color="#fff" size={30} />
-            </div>
-          </TouchableOpacity>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+            height: "50%",
+          }}
+        >
+          {/* greet the user */}
+          <span style={{ fontSize: 18 }}>{greeting} Marsh !</span>
+          <>
+            {/* display date and time */}
+            <span>
+              {formattedTime} - {formattedDate}
+            </span>
+          </>
         </div>
-        {/* greet the user */}
-        <h2 style={{ margin: "1rem 0" }}>Good morning Marsh !</h2>
-        <>
-          {/* display date and time */}
-          <span>02:43 AM</span>
-          <span>Mon, Sep 24</span>
-          <br />
-        </>
+        <div className="widget">
+          <div className="text">
+            <div
+              style={{
+                height: "40%",
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 0,
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: 12, margin: 0 }}>fun with friends</span>
+              <span style={{ fontSize: 14, margin: 0 }}>
+                Get a free ride by referring
+              </span>
+            </div>
+            <TouchableOpacity id="refer-button">
+              <span style={{ fontSize: 14, color: "#fff" }}>
+                Refer a Friend
+              </span>
+            </TouchableOpacity>
+          </div>
+          <div className="image"></div>
+        </div>
       </div>
       <div className="mid_details">
         <div className="mid_details_upper">
@@ -49,9 +112,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <CiDeliveryTruck size={34} color="#ffc107" />
-              <p style={{ fontSize: 14, margin: "1rem 0" }}>
-                Delivery
-              </p>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>Delivery</p>
             </Link>
           </TouchableOpacity>
 
@@ -59,9 +120,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
-              <p style={{ fontSize: 14, margin: "1rem 0" }}>
-                Express
-              </p>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>Express</p>
             </Link>
           </TouchableOpacity>
 
@@ -69,9 +128,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSchedule size={34} color="4caf50" />
-              <p style={{ fontSize: 14, margin: "1rem 0" }}>
-                Schedule
-              </p>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>Schedule</p>
             </Link>
           </TouchableOpacity>
 
@@ -105,7 +162,7 @@ function Home() {
           <TouchableOpacity id="service_item" style={{ width: "65%" }}>
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="pink" />
-              <p style={{ fontSize: 14, margin: "1rem 0"}}>
+              <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 All female ride 🤩
               </p>
             </Link>
