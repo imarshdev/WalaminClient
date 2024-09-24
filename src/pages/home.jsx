@@ -36,9 +36,11 @@ function Home() {
             style={{
               width: "100%",
               textAlign: "start",
-              padding: "0 10px",
+              padding: "10px",
               margin: "0px",
               fontSize: 18,
+              display: "flex",
+              alignItems: "center",
             }}
           >
             Walamin Services
