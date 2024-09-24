@@ -1,8 +1,8 @@
 import React from "react";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
-import "../css/home.css"
-import dine from "../assets/dine.svg"
+import "../css/home.css";
+import dine from "../assets/dine.svg";
 import shopping from "../assets/shopping.svg";
 import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
@@ -22,7 +22,7 @@ function Home() {
           </TouchableOpacity>
         </div>
         {/* greet the user */}
-        <p>Good morning Marsh !</p>
+        <h2 style={{ margin: "1rem 0" }}>Good morning Marsh !</h2>
         <>
           {/* display date and time */}
           <span>02:43 AM</span>
@@ -32,13 +32,24 @@ function Home() {
       </div>
       <div className="mid_details">
         <div className="mid_details_upper">
+          <h2
+            style={{
+              width: "100%",
+              textAlign: "start",
+              padding: "0 10px",
+              margin: "0px",
+              fontSize: 18,
+            }}
+          >
+            Walamin Services
+          </h2>
           {/* delivery button */}
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <CiDeliveryTruck size={34} color="#ffc107" />
-              <p style={{ fontSize: 12, color: "#333333" }}>
-                Delivery Services
-              </p>
+              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#333333" }}>
+                Delivery
+              </h2>
             </Link>
           </TouchableOpacity>
 
@@ -46,7 +57,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
-              <p style={{ fontSize: 12, color: "#1a1d23" }}>Express Ride</p>
+              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#1a1d23" }}>
+                Express
+              </h2>
             </Link>
           </TouchableOpacity>
 
@@ -54,7 +67,9 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSchedule size={34} color="4caf50" />
-              <p style={{ fontSize: 12, color: "#333333" }}>Schedule ride</p>
+              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#333333" }}>
+                Schedule
+              </h2>
             </Link>
           </TouchableOpacity>
 
@@ -62,7 +77,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <img src={dine} style={{ width: "30px" }} />
-              <p style={{ fontSize: 12 }}>Dine</p>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Dine</h2>{" "}
             </Link>
           </TouchableOpacity>
 
@@ -70,7 +85,7 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <img src={shopping} style={{ width: "30px" }} />
-              <p style={{ fontSize: 12 }}>Shopping</p>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Shopping</h2>{" "}
             </Link>
           </TouchableOpacity>
 
@@ -78,31 +93,27 @@ function Home() {
           <TouchableOpacity id="service_item">
             <Link id="link_item">
               <MdSell size={34} color="#ff5a5f" />
-              <p style={{ fontSize: 12 }}>Auction House</p>{" "}
-            </Link>
-          </TouchableOpacity>
-
-          {/* send money button */}
-          <TouchableOpacity id="service_item">
-            <Link id="link_item">
-              <FaServicestack size={34} color="limegreen" />
-              <p style={{ fontSize: 12 }}>Send Money</p>{" "}
-            </Link>
-          </TouchableOpacity>
-
-          {/* withdrawal button */}
-          <TouchableOpacity id="service_item">
-            <Link id="link_item">
-              <FaServicestack size={34} color="limegreen" />
-              <p style={{ fontSize: 12 }}>Withdraw</p>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>
+                Auction House
+              </h2>{" "}
             </Link>
           </TouchableOpacity>
 
           {/* button to all services page */}
-          <TouchableOpacity id="service_item">
+          <TouchableOpacity id="service_item" style={{ width: "65%" }}>
+            <Link id="link_item" to="/ride-request">
+              <GiFullMotorcycleHelmet size={34} color="pink" />
+              <h2 style={{ fontSize: 16, margin: "1rem 0", color: "#1a1d23" }}>
+                All female ride 🤩
+              </h2>
+            </Link>
+          </TouchableOpacity>
+
+          {/* button to all services page */}
+          <TouchableOpacity id="service_item" style={{ width: "30%" }}>
             <Link id="link_item">
               <FaServicestack size={34} color="limegreen" />
-              <p style={{ fontSize: 12 }}>All Services</p>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Services</h2>{" "}
             </Link>
           </TouchableOpacity>
         </div>
@@ -117,7 +128,6 @@ function Home() {
 }
 
 export default Home;
-
 
 export function Navigator() {
   return (
