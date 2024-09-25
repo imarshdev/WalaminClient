@@ -31,7 +31,7 @@ function RideRequestForm() {
             backgroundColor: "pink",
             height: "100px",
             width: "100px",
-            position: "fixed",
+            position: "absolute",
             bottom: "50px",
             left: "0px",
             zIndex: "9999",
