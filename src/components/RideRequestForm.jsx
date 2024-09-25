@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/ride.css";
 import { TouchableOpacity } from "react-native-web";
 function RideRequestForm() {
