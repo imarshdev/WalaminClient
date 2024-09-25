@@ -6,7 +6,7 @@
 .bottomSheet{
     width: 100%;
     background-color: #fff;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     border-radius: 25px 25px 0 0;
     z-index: 99;
