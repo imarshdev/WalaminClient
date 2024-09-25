@@ -100,6 +100,7 @@ input {
 }
 .input-cover {
   border-bottom: solid 0.5px limegreen;
+  width: 90%;
 }
 input:focus {
   outline: none;
