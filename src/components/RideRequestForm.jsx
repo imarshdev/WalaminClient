@@ -10,7 +10,13 @@ function RideRequestForm() {
   return (
     <div
       className="container"
-      style={{ padding: 0, margin: 0, height: "100vh", position: 'fixed', overflow: "hidden", top: 0, left: 0 }}
+      style={{
+        padding: 0,
+        margin: 0,
+        height: "100vh",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
       <div id="map"></div>
       <div
@@ -22,10 +28,22 @@ function RideRequestForm() {
       >
         <div
           style={{
+            backgroundColor: "pink",
+            height: "100px",
+            width: "100px",
+            position: "fixed",
+            bottom: "50px",
+            left: "0px",
+            zIndex: "9999",
+          }}
+        ></div>
+        <div
+          style={{
             width: "50px",
             height: "3px",
             backgroundColor: "darkgreen",
             borderRadius: "10px",
+            position: "fixed",
           }}
         ></div>
         <div className="input-cover">
