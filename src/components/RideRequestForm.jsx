@@ -10,7 +10,7 @@ function RideRequestForm() {
   return (
     <div
       className="container"
-      style={{ padding: 0, margin: 0, height: "100vh" }}
+      style={{ padding: 0, margin: 0, height: "100vh", position: 'fixed', overflow: "hidden", top: 0, left: 0 }}
     >
       <div id="map"></div>
       <div
