@@ -3,16 +3,28 @@
     height: 80vh;
     background-color: #eff2fb;
 }
-.bottomSheet{
+.location-input{
     width: 100%;
-    background-color: #fff;
-    position: fixed;
-    bottom: 0;
-    border-radius: 25px 25px 0 0;
-    z-index: 99;
+    outline: solid .5px limegreen;
+}
+.location-input:focus{
+    outline: solid .5px limegreen;
+}
+[data-rsbs-header]{
+    text-align: start;
+    height: 6rem;
     display: flex;
+    align-items: start;
+    justify-content: center;
     flex-direction: column;
-    align-items: center;
+}
+[data-rsbs-content]{
     box-sizing: border-box;
     padding: 10px;
+}
+#location-item{
+    width: 100%;
+    height: 4rem;
+    background-color: #eff2fb;
+    margin-bottom: 10px;
 }

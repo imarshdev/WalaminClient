@@ -1,65 +1,55 @@
 import React, { useState, useEffect } from "react";
 import "../css/ride.css";
+import "react-spring-bottom-sheet/dist/style.css";
+import { BottomSheet } from "react-spring-bottom-sheet";
 import { TouchableOpacity } from "react-native-web";
 function RideRequestForm() {
-  const [expanded, setExpanded] = useState(false);
-  const goUp = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
-    setExpanded(true);
-  };
+  const [blocking, setBlocking] = useState(false);
+  const [searching, setSearching] = useState(false);
   useEffect(() => {
     const handleScroll = () => window.scrollTo(0, 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const inputFocused = () => {
+    setSearching(true);
+    setBlocking(true);
+  };
+  const inputUnFocused = () => {
+    setSearching(false);
+    setBlocking(false);
+  };
   return (
-    <div
-      className="container"
-      style={{
-        padding: 0,
-        margin: 0,
-        height: "100vh",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div id="map"></div>
-      <div
-        className="bottomSheet"
-        style={{
-          height: expanded ? "90vh" : "30vh",
-          transition: "height 0.5s",
-        }}
+    <div className="container">
+      <BottomSheet
+        blocking={blocking}
+        skipInitialTransition
+        snapPoints={({ maxHeight, minHeight }) => [
+          searching ? maxHeight / 1.05 : minHeight,
+        ]}
+        open={true}
+        header={
+          <label style={{ width: "100%", textAlign: "start" }}>
+            <span style={{ width: "100%" }}>Where to ?</span>
+            <input
+              type="text"
+              className="location-input"
+              onFocus={inputFocused}
+              onBlur={inputUnFocused}
+            />
+          </label>
+        }
       >
-        <div
-          style={{
-            backgroundColor: "pink",
-            height: "100px",
-            width: "100px",
-            position: "absolute",
-            bottom: "50px",
-            left: "0px",
-            zIndex: "9999",
-          }}
-        ></div>
-        <div
-          style={{
-            width: "50px",
-            height: "3px",
-            backgroundColor: "darkgreen",
-            borderRadius: "10px",
-            position: "fixed",
-          }}
-        ></div>
-        <div className="input-cover">
-          <input
-            type="text"
-            onFocus={goUp}
-            onBlur={() => setExpanded(false)}
-            style={{ width: "100%" }}
-          />
-        </div>
-      </div>
+        {searching ? (
+          <p></p>
+        ) : (
+          <>
+            <p>Saved</p>
+            <TouchableOpacity id="location-item"></TouchableOpacity>
+            <TouchableOpacity id="location-item"></TouchableOpacity>
+          </>
+        )}
+      </BottomSheet>
     </div>
   );
 }
