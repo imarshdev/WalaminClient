@@ -12,7 +12,7 @@ import { MdLocationOn } from "react-icons/md";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
-const socket = io("http://localhost:3000");
+const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
   const [notification, setNotification] = useState("");
   const [username, setUsername] = useState("Brian Lubaga");

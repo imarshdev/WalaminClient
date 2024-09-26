@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
-const socket = io("http://localhost:3000");
+const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
   const [userName, setUsername] = useState("James Kagwa");
