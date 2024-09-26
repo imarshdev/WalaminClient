@@ -110,7 +110,7 @@ function Home() {
           </h2>
           {/* delivery button */}
           <TouchableOpacity id="service_item">
-            <Link id="link_item">
+            <Link id="link_item" to="/ride-request">
               <CiDeliveryTruck size={34} color="#ffc107" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Delivery</p>
             </Link>
@@ -126,7 +126,7 @@ function Home() {
 
           {/* schedule ride button */}
           <TouchableOpacity id="service_item">
-            <Link id="link_item">
+            <Link to="/schedule-ride" id="link_item">
               <MdSchedule size={34} color="4caf50" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Schedule</p>
             </Link>

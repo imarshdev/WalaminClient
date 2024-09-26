@@ -21,7 +21,7 @@ import { FaSuitcase } from "react-icons/fa";
 
 function AllServices() {
   return (
-    <div className="container" style={{height: "150vh"}}>
+    <div className="container" style={{height: "150vh", overflow: "scroll"}}>
       <div
         className="mid_details_upper"
         style={{
