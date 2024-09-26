@@ -49,6 +49,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  padding: 10px;
 }
 .mid_details_upper {
   width: 100%;
