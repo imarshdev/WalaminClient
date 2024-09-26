@@ -17,6 +17,7 @@ export default function ScheduleRide() {
               <label style={{ width: "100%", textAlign: "start" }}>
                 <span style={{ width: "100%" }}>Where to ?</span>
                 <input
+                   style={{color:"black"}}
                   color="black"
                   type="text"
                   className="location-input"
