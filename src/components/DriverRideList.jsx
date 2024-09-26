@@ -1,9 +1,53 @@
 import React, { useState, useEffect } from "react";
+import { TouchableOpacity } from "react-native-web";
+import "../css/driver.css";
+import io from "socket.io-client";
+const socket = io("http://localhost:3000");
 
 function DriverRideList() {
+  const [userName, setUsername] = useState("James Kagwa");
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    socket.on("recieveCard", (data) => {
+      console.log("data recieved");
+      console.log(data.username);
+      setCards((prevCards) => [...prevCards, data]);
+    });
+
+    return () => {
+      socket.off("recieveCard");
+    };
+  }, []);
+
+  const sendReaction = (cardSender) => {
+    console.log("sending reaction");
+    const reactorName = userName;
+    socket.emit("reaction", { cardSender, reactorName });
+  };
   return (
-    <div>
+    <div className="rider-container">
       <h2>Available Rides</h2>
+      <br />
+      <div style={{ width: "100%", height: "100%" }}>
+        {cards.map((card, index) => (
+          <div className="ride-container" index={index}>
+            <span>username: {card.username}</span>
+            <span>contact: {card.contact}</span>
+            <span>Pickup: {card.userLocation}</span>
+            <span>Destination: {card.location}</span>
+            <TouchableOpacity
+              id="result-button"
+              onPress={() => sendReaction(card.senderId)}
+            >
+              <p>Accept</p>
+            </TouchableOpacity>
+            <TouchableOpacity style={{backgroundColor: "red"}} id="result-button">
+              <p>Decline</p>
+            </TouchableOpacity>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

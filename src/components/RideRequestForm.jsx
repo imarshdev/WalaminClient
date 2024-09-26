@@ -11,11 +11,31 @@ import { TouchableOpacity } from "react-native-web";
 import { MdLocationOn } from "react-icons/md";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+const socket = io("http://localhost:3000");
 function RideRequestForm() {
+  const [notification, setNotification] = useState("");
+  const [username, setUsername] = useState("Brian Lubaga");
+  const [contact, setContact] = useState(767116290);
+  const [userLocation, setUserLocation] = useState(
+    "4 Cooper Rd, Kampala Uganda"
+  );
+  useEffect(() => {
+    socket.on("notifyReaction", ({ message }) => {
+      console.log("result received");
+      setCostSheetOpen(false);
+      setResultSheet(true);
+      setNotification(message);
+    });
+    return () => {
+      socket.off("notifyReaction");
+    };
+  }, []);
   const [open, setOpen] = useState(true);
   const [searching, setSearching] = useState(false);
   const [typing, setTyping] = useState(false);
   const [location, setLocation] = useState("");
+  const [mapHeight, setMapHeight] = useState(true)
   const [costSheetOpen, setCostSheetOpen] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [resultSheet, setResultSheet] = useState(false);
@@ -30,6 +50,20 @@ function RideRequestForm() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const SendRide = () => {
+    if (location) {
+      const cardData = {
+        username,
+        contact,
+        userLocation,
+        location,
+        senderId: socket.id,
+      };
+      socket.emit("sendCard", cardData);
+    }
+  };
+
   const inputFocused = () => {
     setSearching(true);
   };
@@ -37,6 +71,7 @@ function RideRequestForm() {
     setTimeout(() => {
       setTyping(null);
     }, 100);
+    setMapHeight(false)
     setSearching(false);
     setLocation(inputRef.current.value);
   };
@@ -44,6 +79,7 @@ function RideRequestForm() {
     setTyping(true);
   };
   const locationSelected = () => {
+    setMapHeight(true)
     setOpen(false);
     setCostSheetOpen(true);
   };
@@ -51,23 +87,23 @@ function RideRequestForm() {
     setOpen(true);
     setTyping(false);
     setCostSheetOpen(false);
-    setResultSheet(false)
+    setResultSheet(false);
   };
   const ordered = () => {
+    SendRide();
     setWaiting(true);
-  };
-  const ready = () => {
-    setCostSheetOpen(false);
-    setResultSheet(true);
   };
   useEffect(() => {
     if (location) {
       console.log(location);
+      console.log(userLocation);
+      console.log(contact);
+      console.log(username);
     }
   });
   return (
     <div className="container">
-      <div id="map" style={{ height: costSheetOpen ? "55vh" : "80vh" }}></div>
+      <div id="map" style={{ height: mapHeight ? "55vh" : "80vh" }}></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
       </TouchableOpacity>
@@ -138,13 +174,6 @@ function RideRequestForm() {
         {waiting ? (
           <div className="waiting">
             <p>WAITING.........</p>
-            <TouchableOpacity
-              onPress={ready}
-              id="decline"
-              style={{ width: "100%", backgroundColor: "limegreen" }}
-            >
-              <p style={{ color: "#fff" }}>Ready.</p>
-            </TouchableOpacity>
             <br />
             <TouchableOpacity
               onPress={declined}
@@ -190,13 +219,15 @@ function RideRequestForm() {
       <BottomSheet blocking={false} open={resultSheet}>
         {result ? (
           <div className="result">
-            <p> Your captain is 3 minutes way...</p>
+            <p>Your captain {notification} is on his way</p>
             <div className="rider-image"></div>
             <div className="driver-details">
-              <p>Name: Musinguzi Ronald</p>
+              <p>Name: {notification}</p>
               <p>Bajaj 120, lemon green</p>
               <p>UFU171C</p>
             </div>
+            <br />
+            <br />
             <div className="action-container">
               <TouchableOpacity
                 onPress={declined}

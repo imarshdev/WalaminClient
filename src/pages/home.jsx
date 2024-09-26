@@ -170,9 +170,9 @@ function Home() {
 
           {/* button to all services page */}
           <TouchableOpacity id="service_item" style={{ width: "30%" }}>
-            <Link id="link_item">
+            <Link id="link_item" to="/driver-rides">
               <FaServicestack size={34} color="limegreen" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Services</h2>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Captain's</h2>{" "}
             </Link>
           </TouchableOpacity>
         </div>
