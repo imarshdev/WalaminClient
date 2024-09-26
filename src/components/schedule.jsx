@@ -6,7 +6,7 @@ export default function ScheduleRide() {
   const [step, setStep] = useState(1);
   const [focused, setFocused] = useState(false);
   return (
-    <div className="container">
+    <div className="container2">
       {step === 1 && (
         <div className="step-container">
           <BottomSheet
