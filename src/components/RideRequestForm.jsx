@@ -66,7 +66,7 @@ function RideRequestForm() {
     }
   });
   return (
-    <div className="container">
+    <div className="container2">
       <div id="map" style={{ height: costSheetOpen ? "55vh" : "80vh" }}></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
