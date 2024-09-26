@@ -102,8 +102,8 @@ function RideRequestForm() {
     }
   });
   return (
-    <div className="container">
-      <div id="map" style={{ height: mapHeight ? "55vh" : "80vh" }}></div>
+    <div className="container2">
+      <div id="map" style={{ height: costSheetOpen ? "55vh" : "80vh" }}></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
       </TouchableOpacity>
@@ -119,7 +119,7 @@ function RideRequestForm() {
           <label style={{ width: "100%", textAlign: "start" }}>
             <span style={{ width: "100%" }}>Where to ?</span>
             <input
-              color="black"
+              style={{color:"black"}}
               type="text"
               className="location-input"
               ref={inputRef}

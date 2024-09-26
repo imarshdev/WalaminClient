@@ -6,7 +6,7 @@ export default function ScheduleRide() {
   const [step, setStep] = useState(1);
   const [focused, setFocused] = useState(false);
   return (
-    <div className="container">
+    <div className="container2">
       {step === 1 && (
         <div className="step-container">
           <BottomSheet
@@ -17,6 +17,7 @@ export default function ScheduleRide() {
               <label style={{ width: "100%", textAlign: "start" }}>
                 <span style={{ width: "100%" }}>Where to ?</span>
                 <input
+                   style={{color:"black"}}
                   color="black"
                   type="text"
                   className="location-input"
