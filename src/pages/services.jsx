@@ -31,6 +31,8 @@ function AllServices() {
           justifyContent: "space-between",
           alignItems: "start",
           backgroundColor: "#eff2fb",
+          boxSizing: "border-box",
+          padding: "10px"
         }}
       >
         <p style={{ width: "100%", margin: 10 }}>Walamin Services</p>
