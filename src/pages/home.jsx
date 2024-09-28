@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-web";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/home.css";
 import dine from "../assets/dine.svg";
 import shopping from "../assets/shopping.svg";
@@ -8,10 +8,18 @@ import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { MdSchedule, MdSell } from "react-icons/md";
+import { UserContext } from "../context/userContext";
 
 function Home() {
+  const { userData, setUserData } = useContext(UserContext);
   const [greeting, setGreeting] = useState();
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userData.isLoggedIn === false) {
+      navigate("/signin", { replace: true });
+    } 
+  });
 
   // this is simply getting the current time at all times to ensure proper greeting of the current user
   useEffect(() => {
@@ -19,11 +27,11 @@ function Home() {
     let time;
 
     if (currentTime < 12) {
-      time = "Good morning, ";
+      time = "Good morning ";
     } else if (currentTime < 18) {
-      time = "Good afternoon, ";
+      time = "Good afternoon ";
     } else {
-      time = "Good evening, ";
+      time = "Good evening ";
     }
     setGreeting(time);
   });
@@ -60,7 +68,9 @@ function Home() {
           }}
         >
           {/* greet the user */}
-          <span style={{ fontSize: 18 }}>{greeting} Marsh !</span>
+          <span style={{ fontSize: 18 }}>
+            {greeting} {userData.firstName} !
+          </span>
           <>
             {/* display date and time */}
             <span>
@@ -94,7 +104,9 @@ function Home() {
         </div>
       </div>
       <div className="mid_details">
-        <div className="mid_details_upper">
+        <div
+          className="mid_details_upper"
+        >
           <h2
             style={{
               width: "100%",

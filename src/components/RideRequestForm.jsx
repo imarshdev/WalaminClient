@@ -3,7 +3,7 @@
 /*
   FULL EXPLANAION
 */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
 import "react-spring-bottom-sheet/dist/style.css";
 import { BottomSheet } from "react-spring-bottom-sheet";
@@ -12,11 +12,13 @@ import { MdLocationOn } from "react-icons/md";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { UserContext } from "../context/userContext";
 const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
+  const { userData, setUserData } = useContext(UserContext);
   const [notification, setNotification] = useState("");
-  const [username, setUsername] = useState("Brian Lubaga");
-  const [contact, setContact] = useState(767116290);
+  const [username, setUsername] = useState(userData.firstName);
+  const [contact, setContact] = useState(userData.contact);
   const [userLocation, setUserLocation] = useState(
     "4 Cooper Rd, Kampala Uganda"
   );
@@ -35,7 +37,7 @@ function RideRequestForm() {
   const [searching, setSearching] = useState(false);
   const [typing, setTyping] = useState(false);
   const [location, setLocation] = useState("");
-  const [mapHeight, setMapHeight] = useState(true)
+  const [mapHeight, setMapHeight] = useState(true);
   const [costSheetOpen, setCostSheetOpen] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [resultSheet, setResultSheet] = useState(false);
@@ -71,7 +73,7 @@ function RideRequestForm() {
     setTimeout(() => {
       setTyping(null);
     }, 100);
-    setMapHeight(false)
+    setMapHeight(false);
     setSearching(false);
     setLocation(inputRef.current.value);
   };
@@ -79,7 +81,7 @@ function RideRequestForm() {
     setTyping(true);
   };
   const locationSelected = () => {
-    setMapHeight(true)
+    setMapHeight(true);
     setOpen(false);
     setCostSheetOpen(true);
   };
@@ -119,7 +121,7 @@ function RideRequestForm() {
           <label style={{ width: "100%", textAlign: "start" }}>
             <span style={{ width: "100%" }}>Where to ?</span>
             <input
-              style={{color:"black"}}
+              style={{ color: "black" }}
               type="text"
               className="location-input"
               ref={inputRef}

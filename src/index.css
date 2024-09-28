@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   height: 100%;
 }
 html {
@@ -51,9 +51,8 @@ span{
   color: darkgreen;
 }
 body {
-  width: 100vw;
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  height: 100vh;
   box-sizing: border-box;
   display: flex;
   place-items: center;
@@ -101,6 +100,8 @@ input {
 .input-cover {
   border-bottom: solid 0.5px darkgreen;
   width: 90%;
+  display: flex;
+  align-items: center;
 }
 input:focus {
   outline: none;
@@ -116,7 +117,7 @@ textarea {
   margin: 0;
 }
 .container {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   box-sizing: border-box;
   padding: 10px 2.5%;
@@ -127,7 +128,7 @@ textarea {
   flex-direction: column;
 }
 .container2 {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   box-sizing: border-box;
   padding: 0;

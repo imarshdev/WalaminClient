@@ -1,59 +1,146 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from "react";
+import "../css/signin.css";
+import { TouchableOpacity } from "react-native-web";
+import { UserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
-  const [formData, setFormData] = useState({
-    username: "",
-    token: "",
-  });
-
-  const { setUser } = useContext(AuthContext);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const { userData, setUserData } = useContext(UserContext);
+  const [step, setStep] = useState(1);
+  const [error, setError] = useState("");
+  const [contact, setContact] = useState();
+  const [firstname, setFirstname] = useState();
+  const [lastname, setLastname] = useState();
+  const [loading, setLoading] = useState(false);
+  const contactRef = useRef();
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const navigate = useNavigate();
+  const handlePhoneChange = () => {
+    const phoneNumberInput = contactRef.current.value;
+    if (phoneNumberInput.startsWith("+256") && phoneNumberInput.length === 13) {
+      setContact(phoneNumberInput);
+      setError("");
+      setStep(2);
+    } else if (
+      phoneNumberInput.startsWith("7") &&
+      phoneNumberInput.length === 9
+    ) {
+      setContact("+256" + phoneNumberInput);
+      setError("");
+      setStep(2);
+    } else if (
+      phoneNumberInput.startsWith("07") &&
+      phoneNumberInput.length === 10
+    ) {
+      setContact("+256" + phoneNumberInput.slice(1));
+    } else {
+      setError("Enter valid phone number");
+    }
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post("/api/auth/signin", formData);
-
-      // Store user data in global state
-      setUser({
-        username: response.data.username,
-        contact: response.data.contact,
-        token: response.data.token,
+  const handleUsernameChange = () => {
+    const FirstName = firstNameRef.current.value;
+    const LastName = lastNameRef.current.value;
+    if (FirstName === "" || LastName === "") {
+      setError("Enter user details");
+    } else {
+      setFirstname(FirstName);
+      setLastname(LastName);
+      setUserData({
+        firstName: FirstName,
+        lastName: LastName,
+        contact: contact,
+        isloggedIn: true,
       });
-    } catch (error) {
-      console.error("Error signing in:", error.response?.data?.message);
+      setLoading(true);
+      navigate("/");
+      setError("");
     }
   };
 
+  useEffect(() => {
+    console.log(userData);
+  });
+
+  useLayoutEffect(() => {
+    if (firstname || lastname || contact) {
+      console.log("contact: ", contact);
+      console.log("firstname: ", firstname);
+      console.log("lastname: ", lastname);
+      console.log(userData);
+      setLoading(false);
+    } else {
+      console.log("didn't work");
+    }
+  });
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="token"
-        placeholder="Six-digit Token"
-        value={formData.token}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Sign In</button>
-    </form>
+    <div className="container" style={{ justifyContent: "space-around" }}>
+      {step === 1 && (
+        <label className="label">
+          <div className="walaminLogo">
+            <span>logo</span>
+          </div>
+          <br />
+          <p>Enter Phone Number</p>
+          <div className="input-cover">
+            <span>+256 </span>
+            <input
+              ref={contactRef}
+              type="number"
+              placeholder="000 000 000"
+              inputMode="numeric"
+              style={{ backgroundColor: "#eff2fb", width: "100%" }}
+            />
+          </div>
+          <p style={{ color: "red" }}>{error}</p>
+          <br />
+          <br />
+          <TouchableOpacity onPress={handlePhoneChange} id="done_button">
+            <p>Next</p>
+          </TouchableOpacity>
+        </label>
+      )}
+      {step === 2 && (
+        <label className="label">
+          <div className="walaminLogo">
+            <span>logo</span>
+          </div>
+          <br />
+          <p>First Name :</p>
+          <div className="input-cover">
+            <input
+              ref={firstNameRef}
+              type="text"
+              required
+              style={{ backgroundColor: "#eff2fb", width: "100%" }}
+            />
+          </div>
+          <br />
+          <p>Last Name :</p>
+          <div className="input-cover">
+            <input
+              ref={lastNameRef}
+              type="text"
+              required
+              style={{ backgroundColor: "#eff2fb", width: "100%" }}
+            />
+          </div>
+          <p style={{ color: "red" }}>{error}</p>
+          <br />
+          <TouchableOpacity onPress={handleUsernameChange} id="done_button">
+            {loading ? <p>Loading...</p> : <p>Done</p>}
+          </TouchableOpacity>
+        </label>
+      )}
+      <p></p>
+    </div>
   );
 }
 

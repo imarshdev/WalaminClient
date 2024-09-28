@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
+import { UserContext } from "../context/userContext";
 const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
-  const [userName, setUsername] = useState("James Kagwa");
+  const { userData, setUserData } = useContext(UserContext);
+  const [userName, setUsername] = useState(userData.firstName);
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -42,7 +44,10 @@ function DriverRideList() {
             >
               <p>Accept</p>
             </TouchableOpacity>
-            <TouchableOpacity style={{backgroundColor: "red"}} id="result-button">
+            <TouchableOpacity
+              style={{ backgroundColor: "red" }}
+              id="result-button"
+            >
               <p>Decline</p>
             </TouchableOpacity>
           </div>

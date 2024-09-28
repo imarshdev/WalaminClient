@@ -1,13 +1,45 @@
-import React from "react";
+import React, { useContext } from "react";
+import "../css/account.css";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
 import { FaHome, FaServicestack } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
+import { UserContext } from "../context/userContext";
 
 function Account() {
+  const { userData } = useContext(UserContext);
   return (
     <div className="container">
-      <h1>Account</h1>
+      <p>My Account</p>
+      <div className="account-card">
+        <span>
+          Username: {userData.firstName} {userData.lastName}
+        </span>
+        <span>Contact: {userData.contact}</span>
+      </div>
+      <br />
+      <div className="account-options">
+        <p style={{ width: "100%", textAlign: "start" }}>Your account</p>
+        <TouchableOpacity id="account-option">
+          <span>Personal Information</span>
+        </TouchableOpacity>
+        <TouchableOpacity id="account-option">
+          <span>Scheduled rides</span>
+        </TouchableOpacity>
+        <TouchableOpacity id="account-option">
+          <span>Ride History</span>
+        </TouchableOpacity>
+        <p style={{ width: "100%", textAlign: "start" }}>Support</p>
+        <TouchableOpacity id="account-option">
+          <span>Contact Support</span>
+        </TouchableOpacity>
+        <TouchableOpacity id="account-option">
+          <span>Become a captain</span>
+        </TouchableOpacity>
+        <TouchableOpacity id="account-option">
+          <span>Rate this app</span>
+        </TouchableOpacity>
+      </div>
       <Navigator />
     </div>
   );

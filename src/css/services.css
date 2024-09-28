@@ -1,0 +1,8 @@
+.three-collection {
+  width: 100%;
+  display: flex;
+}
+.bottom-space {
+  width: 100%;
+  height: 10rem;
+}

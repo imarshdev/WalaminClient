@@ -1,4 +1,5 @@
 import React from "react";
+import "../css/services.css"
 import { FaHome, FaServicestack } from "react-icons/fa";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
@@ -21,21 +22,22 @@ import { FaSuitcase } from "react-icons/fa";
 
 function AllServices() {
   return (
-    <div className="container" style={{height: "150vh", overflow: "scroll"}}>
+    <div style={{ height: "100vh", overflow: "scroll" }}>
       <div
-        className="mid_details_upper"
         style={{
           width: "100%",
-          height: "90%",
+          height: "120vh",
           display: "flex",
+          flexWrap: "wrap",
           justifyContent: "space-between",
-          alignItems: "start",
+          alignItems: "end",
           backgroundColor: "#eff2fb",
           boxSizing: "border-box",
-          padding: "10px"
+          padding: "5rem 1rem",
+          boxSizing: "border-box",
         }}
       >
-        <p style={{ width: "100%", margin: 10 }}>Walamin Services</p>
+        <span style={{ width: "100%", margin: 0 }}>Walamin Services</span>
 
         {/* delivery button */}
         <TouchableOpacity
@@ -96,7 +98,7 @@ function AllServices() {
           </Link>
         </TouchableOpacity>
 
-        <p style={{ width: "100%", margin: 10 }}>Deal Square</p>
+        <span style={{ width: "100%", margin: 0 }}>Deal Square</span>
 
         {/* dine button */}
         <TouchableOpacity
@@ -128,7 +130,7 @@ function AllServices() {
           </Link>
         </TouchableOpacity>
 
-        <p style={{ width: "100%", margin: 10 }}>24 Hour Services</p>
+        <span style={{ width: "100%", margin: 0 }}>24 Hour Services</span>
 
         {/* send money button */}
         <TouchableOpacity
@@ -255,6 +257,8 @@ function AllServices() {
             <p style={{ fontSize: 12, color: "#663300" }}>Auction House</p>{" "}
           </Link>
         </TouchableOpacity>
+
+        <div className="bottom-space"></div>
       </div>
       <Navigator />
     </div>

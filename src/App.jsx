@@ -13,7 +13,6 @@ import ErrorPage from "./pages/errorpage.jsx";
 import AllServices from "./pages/services.jsx";
 import Account from "./pages/account.jsx";
 import Signin from "./pages/signin.jsx";
-import Signup from "./pages/signup.jsx";
 import RideRequestForm from "./components/RideRequestForm.jsx";
 import DriverRideList from "./components/DriverRideList.jsx";
 import ScheduleRide from "./components/schedule.jsx";
@@ -37,11 +36,6 @@ const router = createBrowserRouter([
   {
     path: "/signin",
     element: <Signin />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
     errorElement: <ErrorPage />,
   },
   {
