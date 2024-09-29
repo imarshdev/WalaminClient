@@ -64,11 +64,8 @@
   height: 6.5rem;
   box-sizing: border-box;
   padding: 10px;
-  border-radius: 15px;
+  border-radius: 10px;
   margin-bottom: 15px;
-  border: solid 0.5px rgba(50, 205, 50, 0.185);
-  background-color: rgba(245, 245, 245, 0.411);
-  box-shadow: 4px 4px 1px rgba(50, 205, 50, 0.185);
 }
 #link_item {
   width: 100%;
@@ -77,4 +74,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+@font-face {
+  font-family: boldSans;
+  src: url(../assets/JosefinSans-Bold.ttf);
+}
+#service_item p {
+  font-family: boldSans;
+  font-size: 12px;
 }

@@ -7,7 +7,7 @@ const UserProvider = ({ children }) => {
     contact: "",
     firstName: "",
     lastName: "",
-    isLoggedIn: false,
+    isLoggedIn: null,
   });
   useEffect(() => {
     const storedData = localStorage.getItem("userData");

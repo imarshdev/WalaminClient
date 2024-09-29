@@ -17,6 +17,7 @@ function Home() {
   const navigate = useNavigate();
   useEffect(() => {
     if (userData.isLoggedIn === false) {
+      console.log("not logged in");
       navigate("/signin", { replace: true });
     } 
   });
@@ -104,9 +105,7 @@ function Home() {
         </div>
       </div>
       <div className="mid_details">
-        <div
-          className="mid_details_upper"
-        >
+        <div className="mid_details_upper">
           <h2
             style={{
               width: "100%",
@@ -121,72 +120,72 @@ function Home() {
             Walamin Services
           </h2>
           {/* delivery button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link id="link_item" to="/ride-request">
               <CiDeliveryTruck size={34} color="#ffc107" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Delivery</p>
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* express ride button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Express</p>
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* schedule ride button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link to="/schedule-ride" id="link_item">
               <MdSchedule size={34} color="4caf50" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Schedule</p>
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* dine button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link id="link_item">
               <img src={dine} style={{ width: "30px" }} />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Dine</p>{" "}
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* shopping button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link id="link_item">
               <img src={shopping} style={{ width: "30px" }} />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Shopping</p>{" "}
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* auction house button */}
-          <TouchableOpacity id="service_item">
+          <button id="service_item">
             <Link id="link_item">
               <MdSell size={34} color="#ff5a5f" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 Auction House
               </p>{" "}
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* button to all services page */}
-          <TouchableOpacity id="service_item" style={{ width: "65%" }}>
+          <button id="service_item" style={{ width: "65%" }}>
             <Link id="link_item" to="/ride-request">
               <GiFullMotorcycleHelmet size={34} color="pink" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>
                 All female ride 🤩
               </p>
             </Link>
-          </TouchableOpacity>
+          </button>
 
           {/* button to all services page */}
-          <TouchableOpacity id="service_item" style={{ width: "30%" }}>
+          <button id="service_item" style={{ width: "30%" }}>
             <Link id="link_item" to="/driver-rides">
               <FaServicestack size={34} color="limegreen" />
               <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Captain's</h2>{" "}
             </Link>
-          </TouchableOpacity>
+          </button>
         </div>
         <div className="mid_details_lower">
           <div className="image"></div>

@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/services.css"
+import "../css/services.css";
 import { FaHome, FaServicestack } from "react-icons/fa";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ import { FaSuitcase } from "react-icons/fa";
 
 function AllServices() {
   return (
-    <div style={{ height: "100vh", overflow: "scroll" }}>
+    <div className="container2" style={{ height: "100vh", overflow: "scroll" }}>
       <div
         style={{
           width: "100%",
@@ -34,229 +34,220 @@ function AllServices() {
           backgroundColor: "#eff2fb",
           boxSizing: "border-box",
           padding: "5rem 1rem",
-          boxSizing: "border-box",
         }}
       >
         <span style={{ width: "100%", margin: 0 }}>Walamin Services</span>
 
         {/* delivery button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
-          <Link to="/map2" id="link_item">
+          <Link to="/ride-request" id="link_item">
             <CiDeliveryTruck size={34} color="#ffc107" />
-            <p style={{ fontSize: 12, color: "#333333" }}>Delivery Services</p>
+            <p style={{ color: "#333333", fontWeight: "bold" }}>Delivery</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* Order ride button */}
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
-          <Link to="/currentRide" id="link_item">
+        <button id="service_item" style={{ padding: "10px" }}>
+          <Link to="/ride-request" id="link_item">
             <GiFullMotorcycleHelmet size={34} color="#0097a7" />
-            <p style={{ fontSize: 12, color: "#1a1d23" }}>Express Ride</p>
+            <p style={{ color: "#1a1d23" }}>Express Ride</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* schedule ride button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link to="/agree" id="link_item">
             <MdSchedule size={34} color="4caf50" />
-            <p style={{ fontSize: 12, color: "#333333" }}>Schedule ride</p>
+            <p style={{ color: "#333333" }}>Schedule ride</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* the pharmacy button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdPayments size={34} color="8bc34a" />
-            <p style={{ fontSize: 12, color: "#333333" }}>E pay</p>
+            <p style={{ color: "#333333" }}>E pay</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* all female rides button */}
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link to="/currentRide" id="link_item">
             <GiFullMotorcycleHelmet size={34} color="pink" />
-            <p style={{ fontSize: 12, color: "#660000" }}>All Female Ride</p>
+            <p style={{ color: "#660000" }}>All Female Ride</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdPedalBike size={34} color="#ff9800" />
-            <p style={{ fontSize: 12, color: "#333333" }}>Bikes</p>{" "}
+            <p style={{ color: "#333333" }}>Bikes</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         <span style={{ width: "100%", margin: 0 }}>Deal Square</span>
 
         {/* dine button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <img src={dine} style={{ width: "34px" }} />
-            <p style={{ fontSize: 12, color: "#663300" }}>Dine</p>{" "}
+            <p style={{ color: "#663300" }}>Dine</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* shopping button */}
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link id="link_item">
             <img src={shopping} style={{ width: "34px" }} />
-            <p style={{ fontSize: 12, color: "" }}>Shopping</p>{" "}
+            <p style={{ color: "" }}>Shopping</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* auction house */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <TiTicket size={34} color="dc143c" />
-            <p style={{ fontSize: 12, color: "#330000" }}>Cinemax</p>{" "}
+            <p style={{ color: "#330000" }}>Cinemax</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         <span style={{ width: "100%", margin: 0 }}>24 Hour Services</span>
 
         {/* send money button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdEvent size={34} color="8e24aa" />
-            <p style={{ fontSize: 12, color: "" }}>Events</p>{" "}
+            <p style={{ color: "" }}>Events</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link id="link_item">
             <GiMedicalPack size={34} color="#6495ed" />
-            <p style={{ fontSize: 12, color: "#330000" }}>
-              Medicare & Pharmaceuticals
-            </p>{" "}
+            <p style={{ color: "#330000" }}>Medicare & Pharmaceuticals</p>
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* withdrawal button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <RiAuctionLine size={34} color="#ffd700" />
-            <p style={{ fontSize: 12, color: "#663300" }}>Auction House</p>{" "}
+            <p style={{ color: "#663300" }}>Auction House</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         <p style={{ width: "100%", margin: 10 }}>More !!</p>
 
         {/* send money button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdTour size={34} color="#f08080" />
-            <p style={{ fontSize: 12, color: "" }}>Tourism</p>{" "}
+            <p style={{ color: "" }}>Tourism</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link id="link_item">
             <FaSuitcase size={34} color="#c0c0c0" />
-            <p style={{ fontSize: 12, color: "#330000" }}>Jobs</p>{" "}
+            <p style={{ color: "#330000" }}>Jobs</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* withdrawal button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <GiHouse size={34} color="#98ff98" />
-            <p style={{ fontSize: 12, color: "#663300" }}>
-              Rentals & Houses
-            </p>{" "}
+            <p style={{ color: "#663300" }}>Rentals & Houses</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* send money button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdEvent size={34} color="8e24aa" />
-            <p style={{ fontSize: 12, color: "" }}>Events</p>{" "}
+            <p style={{ color: "" }}>Events</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link id="link_item">
             <GiMedicalPack size={34} color="#6495ed" />
-            <p style={{ fontSize: 12, color: "#330000" }}>
-              Medicare & Pharmaceuticals
-            </p>{" "}
+            <p style={{ color: "#330000" }}>Medicare & Pharmaceuticals</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* withdrawal button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <RiAuctionLine size={34} color="#ffd700" />
-            <p style={{ fontSize: 12, color: "#663300" }}>Auction House</p>{" "}
+            <p style={{ color: "#663300" }}>Auction House</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* send money button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <MdEvent size={34} color="8e24aa" />
-            <p style={{ fontSize: 12, color: "" }}>Events</p>{" "}
+            <p style={{ color: "" }}>Events</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
-        <TouchableOpacity id="service_item" style={{ padding: "10px" }}>
+        <button id="service_item" style={{ padding: "10px" }}>
           <Link id="link_item">
             <GiMedicalPack size={34} color="#6495ed" />
-            <p style={{ fontSize: 12, color: "#330000" }}>
-              Medicare & Pharmaceuticals
-            </p>{" "}
+            <p style={{ color: "#330000" }}>Medicare & Pharmaceuticals</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         {/* withdrawal button */}
-        <TouchableOpacity
+        <button
           id="service_item"
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
             <RiAuctionLine size={34} color="#ffd700" />
-            <p style={{ fontSize: 12, color: "#663300" }}>Auction House</p>{" "}
+            <p style={{ color: "#663300" }}>Auction House</p>{" "}
           </Link>
-        </TouchableOpacity>
+        </button>
 
         <div className="bottom-space"></div>
       </div>

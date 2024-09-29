@@ -65,7 +65,7 @@ function Signin() {
   };
 
   useEffect(() => {
-    console.log(userData);
+    console.log("first userdata log",userData);
   });
 
   useLayoutEffect(() => {
@@ -73,7 +73,7 @@ function Signin() {
       console.log("contact: ", contact);
       console.log("firstname: ", firstname);
       console.log("lastname: ", lastname);
-      console.log(userData);
+      console.log("second userdata log", userData);
       setLoading(false);
     } else {
       console.log("didn't work");
