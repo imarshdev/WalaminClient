@@ -129,7 +129,7 @@ function RideRequestForm() {
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11", // Map style
         center: [userLng, userLat], // Starting position [lng, lat]
-        zoom: 12, // Starting zoom level
+        zoom: 15, // Starting zoom level
       });
       const marker = new mapboxgl.Marker().setLngLat({
         lng: userLng,
@@ -140,11 +140,11 @@ function RideRequestForm() {
     }
   }, [userLat, userLng]);
   return (
-    <div className="container2">
+    <div className="container2" style={{boxSizing: "border-box", padding: "10px"}}>
       <div
         id="map"
         ref={mapContainerRef}
-        style={{ height: costSheetOpen ? "55vh" : "80vh" }}
+        style={{ height: costSheetOpen ? "55vh" : typing === null ? "80vh" : "60vh" }}
       ></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />

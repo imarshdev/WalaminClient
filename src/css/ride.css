@@ -3,6 +3,8 @@
   border-radius: 20px;
   background-color: #eff2fb;
   overflow: hidden;
+  box-shadow: 0px 0px 5px black;
+  transition: height 0.3s ease-in-out;
 }
 #go-back {
   position: absolute;
@@ -19,7 +21,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0 10px;
-  height: 3.5rem;
+  height: 3rem;
   outline: solid 0.1px rgba(0, 100, 0, 0.26);
   background-color: #eff2fb;
   margin-bottom: 15px;
@@ -37,8 +39,8 @@
 }
 #location-item {
   width: 100%;
-  height: 3rem;
-  border-bottom: solid .5px #eff2fb;
+  height: 2.5rem;
+  border-bottom: solid 0.5px #eff2fb;
   margin-bottom: 10px;
   border-radius: 10px;
   box-sizing: border-box;
@@ -56,6 +58,7 @@
   background-color: limegreen;
   margin-bottom: 20px;
   border-radius: 10px;
+  margin-bottom: 10rem;
 }
 .cost-estimate {
   width: 100%;
@@ -117,7 +120,7 @@
   justify-content: start;
   align-items: start;
 }
-.rider-image{
+.rider-image {
   width: 6rem;
   height: 6rem;
   background-color: pink;
