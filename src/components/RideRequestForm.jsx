@@ -15,13 +15,14 @@ import io from "socket.io-client";
 import { UserContext } from "../context/userContext";
 const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
+  const mapContainerRef = useRef(null);
   const { userData, setUserData } = useContext(UserContext);
   const [notification, setNotification] = useState("");
   const [username, setUsername] = useState(userData.firstName);
   const [contact, setContact] = useState(userData.contact);
-  const [userLocation, setUserLocation] = useState(
-    "4 Cooper Rd, Kampala Uganda"
-  );
+  const [userLocation, setUserLocation] = useState([]);
+  const [userLat, setUserLat] = useState();
+  const [userLng, setUserLng] = useState();
   useEffect(() => {
     socket.on("notifyReaction", ({ message }) => {
       console.log("result received");
@@ -103,9 +104,48 @@ function RideRequestForm() {
       console.log(username);
     }
   });
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        console.log(lat);
+        console.log(lng);
+        setUserLat(lat);
+        setUserLng(lng);
+      },
+      (error) => {
+        console.log("error:", error);
+      }
+    );
+  });
+  useEffect(() => {
+    const mapboxgl = window.mapboxgl;
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg";
+
+    if (userLat || userLng) {
+      const map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/mapbox/streets-v11", // Map style
+        center: [userLng, userLat], // Starting position [lng, lat]
+        zoom: 12, // Starting zoom level
+      });
+      const marker = new mapboxgl.Marker().setLngLat({
+        lng: userLng,
+        lat: userLat,
+      });
+      marker.addTo(map);
+      return () => map.remove();
+    }
+  }, [userLat, userLng]);
   return (
     <div className="container2">
-      <div id="map" style={{ height: costSheetOpen ? "55vh" : "80vh" }}></div>
+      <div
+        id="map"
+        ref={mapContainerRef}
+        style={{ height: costSheetOpen ? "55vh" : "80vh" }}
+      ></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
       </TouchableOpacity>
@@ -141,15 +181,15 @@ function RideRequestForm() {
           <>
             <p>Saved</p>
             <TouchableOpacity id="location-item">
-              <MdLocationOn size={20} style={{ marginRight: "15px" }} />
+              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
               <span>formatted Address</span>
             </TouchableOpacity>
             <TouchableOpacity id="location-item">
-              <MdLocationOn size={20} style={{ marginRight: "15px" }} />
+              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
               <span>formatted Address</span>
             </TouchableOpacity>
             <TouchableOpacity id="location-item">
-              <MdLocationOn size={20} style={{ marginRight: "15px" }} />
+              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
               <span>formatted Address</span>
             </TouchableOpacity>
             <br />
