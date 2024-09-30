@@ -59,7 +59,8 @@ function RideRequestForm() {
       const cardData = {
         username,
         contact,
-        userLocation,
+        userLat,
+        userLng,
         location,
         senderId: socket.id,
       };
@@ -140,12 +141,17 @@ function RideRequestForm() {
     }
   }, [userLat, userLng]);
   return (
-    <div className="container2" style={{ boxSizing: "border-box", padding: "0px" }}>
+    <div
+      className="container2"
+      style={{ boxSizing: "border-box", padding: "0px" }}
+    >
       <div id="top-shadow"></div>
       <div
         id="map"
         ref={mapContainerRef}
-        style={{ height: costSheetOpen ? "55vh" : typing === null ? "80vh" : "70vh" }}
+        style={{
+          height: costSheetOpen ? "55vh" : typing === null ? "80vh" : "70vh",
+        }}
       ></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
@@ -182,11 +188,19 @@ function RideRequestForm() {
           <>
             <p>Saved</p>
             <TouchableOpacity id="location-item">
-              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
+              <MdLocationOn
+                color="limegreen"
+                size={20}
+                style={{ marginRight: "15px" }}
+              />
               <span>formatted Address</span>
             </TouchableOpacity>
             <TouchableOpacity id="location-item">
-              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
+              <MdLocationOn
+                color="limegreen"
+                size={20}
+                style={{ marginRight: "15px" }}
+              />
               <span>formatted Address</span>
             </TouchableOpacity>
             <br />
