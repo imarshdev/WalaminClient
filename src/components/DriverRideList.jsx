@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
