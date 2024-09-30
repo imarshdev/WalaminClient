@@ -53,7 +53,8 @@ function RideCard({ card, sendReaction }) {
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
         center: [card.userLng, card.userLat],
-        zoom: 15,
+        zoom: 14,
+        attributionControl: false,
       });
       new mapboxgl.Marker().setLngLat([card.userLng, card.userLat]).addTo(map);
 
@@ -69,7 +70,7 @@ function RideCard({ card, sendReaction }) {
       <span>Destination: {card.location}</span>
       <div
         ref={mapContainerRef}
-        style={{ width: "100%", height: "150px", marginTop: "10px", borderRadius: "10px" }}
+        style={{ width: "100%", height: "250px", marginTop: "10px", borderRadius: "10px" }}
       ></div>
       <TouchableOpacity
         id="result-button"
