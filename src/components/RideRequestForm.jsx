@@ -140,7 +140,8 @@ function RideRequestForm() {
     }
   }, [userLat, userLng]);
   return (
-    <div className="container2" style={{boxSizing: "border-box", padding: "10px"}}>
+    <div className="container2" style={{ boxSizing: "border-box", padding: "0px" }}>
+      <div id="top-shadow"></div>
       <div
         id="map"
         ref={mapContainerRef}
@@ -192,7 +193,6 @@ function RideRequestForm() {
               <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
               <span>formatted Address</span>
             </TouchableOpacity>
-            <br />
             <br />
             <p></p>
           </>
