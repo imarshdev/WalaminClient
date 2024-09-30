@@ -6,11 +6,11 @@
 }
 #top-shadow{
   width: 100%;
-  height: .5rem;
+  height: 5rem;
   position: absolute;
   top: 0;
   left: 0;
-  background-image: linear-gradient(to bottom, #eff2fb, transparent);
+  background-image: linear-gradient(to bottom, #eff2fb 5%, #eff2fb00 60%, transparent);
 }
 #go-back {
   position: absolute;
