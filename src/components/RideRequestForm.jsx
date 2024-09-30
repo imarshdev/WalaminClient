@@ -145,7 +145,7 @@ function RideRequestForm() {
       <div
         id="map"
         ref={mapContainerRef}
-        style={{ height: costSheetOpen ? "55vh" : typing === null ? "80vh" : "60vh" }}
+        style={{ height: costSheetOpen ? "55vh" : typing === null ? "80vh" : "70vh" }}
       ></div>
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
@@ -181,10 +181,6 @@ function RideRequestForm() {
         ) : typing === false ? (
           <>
             <p>Saved</p>
-            <TouchableOpacity id="location-item">
-              <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
-              <span>formatted Address</span>
-            </TouchableOpacity>
             <TouchableOpacity id="location-item">
               <MdLocationOn color="limegreen" size={20} style={{ marginRight: "15px" }} />
               <span>formatted Address</span>
