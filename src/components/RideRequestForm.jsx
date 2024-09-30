@@ -20,7 +20,8 @@ function RideRequestForm() {
   const [notification, setNotification] = useState("");
   const [username, setUsername] = useState(userData.firstName);
   const [contact, setContact] = useState(userData.contact);
-  const [userLocation, setUserLocation] = useState([]);
+  const [userLocation, setUserLocation] = useState();
+  const [shortUserlocation, setShortUserlocation] = useState();
   const [userLat, setUserLat] = useState();
   const [userLng, setUserLng] = useState();
   useEffect(() => {
@@ -61,6 +62,8 @@ function RideRequestForm() {
         contact,
         userLat,
         userLng,
+        userLocation,
+        shortUserlocation,
         location,
         senderId: socket.id,
       };
@@ -106,20 +109,48 @@ function RideRequestForm() {
     }
   });
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        console.log(lat);
-        console.log(lng);
-        setUserLat(lat);
-        setUserLng(lng);
-      },
-      (error) => {
-        console.log("error:", error);
-      }
-    );
-  });
+    const getLocation = async () => {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          console.log(lat);
+          console.log(lng);
+          setUserLat(lat);
+          setUserLng(lng);
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+            );
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            const maxLength = 50;
+            const shortname =
+              data.display_name.length > maxLength
+                ? data.display_name.substring(0, maxLength) + "..."
+                : data.display_name;
+                setShortUserlocation(shortname)
+            setUserLocation(data.display_name); // Update state with the place name
+            console.log("short name:", shortname)
+            console.log("Place Name:", data.display_name);
+          } catch (error) {
+            console.log("Error fetching place name:", error.message);
+          }
+        },
+        (error) => {
+          console.log("Error getting location:", error);
+        }
+      );
+    };
+
+    getLocation();
+  }, [setUserLat, setUserLng, setUserLocation]); // Add dependencies for useEffect
+
+  useEffect(() => {
+    console.log("userplace name", userLocation);
+  }, [userLocation]);
   useEffect(() => {
     const mapboxgl = window.mapboxgl;
     mapboxgl.accessToken =
@@ -131,6 +162,7 @@ function RideRequestForm() {
         style: "mapbox://styles/mapbox/streets-v11", // Map style
         center: [userLng, userLat], // Starting position [lng, lat]
         zoom: 15, // Starting zoom level
+        attributionControl: false,
       });
       const marker = new mapboxgl.Marker().setLngLat({
         lng: userLng,
