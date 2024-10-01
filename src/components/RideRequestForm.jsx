@@ -18,6 +18,7 @@ function RideRequestForm() {
   const mapContainerRef = useRef(null);
   const { userData, setUserData } = useContext(UserContext);
   const [notification, setNotification] = useState("");
+  const [rideStatus, setRideStatus] = useState();
   const [username, setUsername] = useState(userData.firstName);
   const [contact, setContact] = useState(userData.contact);
   const [userLocation, setUserLocation] = useState();
@@ -35,6 +36,15 @@ function RideRequestForm() {
       socket.off("notifyReaction");
     };
   }, []);
+  useEffect(() => {
+    socket.on("rideStatusUpdate", (data) => {
+      console.log("status updated:", data.status);
+      setRideStatus(data.status);
+    });
+    return () => {
+      socket.off("rideStatusUpdate");
+    };
+  });
   const [open, setOpen] = useState(true);
   const [searching, setSearching] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -131,9 +141,9 @@ function RideRequestForm() {
               data.display_name.length > maxLength
                 ? data.display_name.substring(0, maxLength) + "..."
                 : data.display_name;
-                setShortUserlocation(shortname)
+            setShortUserlocation(shortname);
             setUserLocation(data.display_name); // Update state with the place name
-            console.log("short name:", shortname)
+            console.log("short name:", shortname);
             console.log("Place Name:", data.display_name);
           } catch (error) {
             console.log("Error fetching place name:", error.message);

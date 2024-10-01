@@ -40,7 +40,7 @@ function DriverRideList() {
   );
 }
 
-function RideCard({ card, sendReaction }) {
+function RideCard({ card, sendReaction, sendMessage, messages }) {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -62,6 +62,15 @@ function RideCard({ card, sendReaction }) {
     }
   }, [card.userLat, card.userLng]);
 
+  const updateRideStatus = (status) => {
+    console.log("updating ride status");
+    socket.emit("updateRideStatus", {
+      cardSender: card.senderId,
+      status,
+      reactorName: card.reactorName || "Rider",
+    });
+  };
+
   return (
     <div className="ride-container">
       <span>Username: {card.username}</span>
@@ -70,7 +79,12 @@ function RideCard({ card, sendReaction }) {
       <span>Destination: {card.location}</span>
       <div
         ref={mapContainerRef}
-        style={{ width: "100%", height: "250px", marginTop: "10px", borderRadius: "10px" }}
+        style={{
+          width: "100%",
+          height: "250px",
+          marginTop: "10px",
+          borderRadius: "10px",
+        }}
       ></div>
       <TouchableOpacity
         id="result-button"
@@ -78,6 +92,20 @@ function RideCard({ card, sendReaction }) {
         onPress={() => sendReaction(card.senderId)}
       >
         <p>Accept</p>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ backgroundColor: "red" }}
+        id="result-button"
+        onPress={() => updateRideStatus("Rider has arrived")}
+      >
+        <p>Slide to arrive</p>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ backgroundColor: "red" }}
+        id="result-button"
+        onPress={() => updateRideStatus("Ride Ended")}
+      >
+        <p>End Ride</p>
       </TouchableOpacity>
       <TouchableOpacity style={{ backgroundColor: "red" }} id="result-button">
         <p>Decline</p>
