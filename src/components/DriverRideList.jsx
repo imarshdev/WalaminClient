@@ -8,6 +8,7 @@ const socket = io("https://walaminserver.onrender.com");
 function DriverRideList() {
   const { userData, setUserData } = useContext(UserContext);
   const [userName, setUsername] = useState(userData.firstName);
+  const [rideaccepted, setRideaccepted] = useState(false);
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -35,6 +36,19 @@ function DriverRideList() {
         {cards.map((card, index) => (
           <RideCard key={index} card={card} sendReaction={sendReaction} />
         ))}
+      </div>
+      <TouchableOpacity onPress={() => setRideaccepted(true)}>
+        <p>Open ride</p>
+      </TouchableOpacity>
+      <div
+        className="ride-accepted"
+        style={{
+          height: rideaccepted ? "100vh" : 0,
+        }}
+      >
+        <TouchableOpacity onPress={() => setRideaccepted(false)}>
+          <p>Close ride</p>
+        </TouchableOpacity>
       </div>
     </div>
   );
