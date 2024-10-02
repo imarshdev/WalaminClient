@@ -56,7 +56,7 @@ function Signin() {
         firstName: FirstName,
         lastName: LastName,
         contact: contact,
-        isloggedIn: true,
+        isLoggedIn: true,
       });
       setLoading(true);
       navigate("/");
