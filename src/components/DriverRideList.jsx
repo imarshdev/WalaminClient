@@ -3,12 +3,14 @@ import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
 import { UserContext } from "../context/userContext";
+import { MdLocationOn, MdTripOrigin } from "react-icons/md";
 const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
   const { userData, setUserData } = useContext(UserContext);
   const [userName, setUsername] = useState(userData.firstName);
   const [rideaccepted, setRideaccepted] = useState(false);
+  const [rideStarted, setRideStarted] = useState(false);
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -37,7 +39,10 @@ function DriverRideList() {
           <RideCard key={index} card={card} sendReaction={sendReaction} />
         ))}
       </div>
-      <TouchableOpacity onPress={() => setRideaccepted(true)}>
+      <TouchableOpacity
+        id="ongoing-map-buttons"
+        onPress={() => setRideaccepted(true)}
+      >
         <p>Open ride</p>
       </TouchableOpacity>
       <div
@@ -46,9 +51,39 @@ function DriverRideList() {
           height: rideaccepted ? "100vh" : 0,
         }}
       >
-        <TouchableOpacity onPress={() => setRideaccepted(false)}>
-          <p>Close ride</p>
-        </TouchableOpacity>
+        <div id="top-shadow"></div>
+        <div id="ongoing-map"></div>
+        <div id="ongoing-map-usage">
+          <p>Progress</p>
+          <span>2/4km and an approximated 3 mins to go!!</span>
+          <br />
+          <div id="progress-bar">
+            <div id="done"></div>
+          </div>
+          <br />
+          <p>
+            <MdTripOrigin style={{ marginRight: "5px" }} /> from :{" "}
+            {"4R Ntinda Rd, Kampala Uganda"}
+          </p>
+          <p>
+            <MdLocationOn style={{ marginRight: "5px" }} />
+            to : {"Acacia Mall, Cooper Rd, Kampala Uganda"}
+          </p>
+          <div id="actions">
+            <TouchableOpacity
+              id="ongoing-map-buttons"
+              onPress={() => setRideStarted(true)}
+            >
+              <span>{rideStarted ? "on Ride" : "start ride"}</span>
+            </TouchableOpacity>
+            <TouchableOpacity
+              id="ongoing-map-buttons"
+              onPress={() => setRideaccepted(false)}
+            >
+              <span>End ride</span>
+            </TouchableOpacity>
+          </div>{" "}
+        </div>
       </div>
     </div>
   );
