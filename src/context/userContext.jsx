@@ -9,6 +9,7 @@ const UserProvider = ({ children }) => {
     lastName: "",
     isLoggedIn: false,
   });
+
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -17,7 +18,15 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(userData));
+    // Only store in localStorage if the user is logged in or if the data has meaningful content
+    if (
+      userData.isLoggedIn ||
+      userData.contact ||
+      userData.firstName ||
+      userData.lastName
+    ) {
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
   }, [userData]);
 
   return (
