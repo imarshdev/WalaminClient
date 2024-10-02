@@ -16,7 +16,7 @@ function Home() {
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
   const navigate = useNavigate();
   useEffect(() => {
-    if (userData.isLoggedIn === false) {
+    if (!userData.isLoggedIn) {
       console.log("not logged in");
       navigate("/signin", { replace: true });
     } 
