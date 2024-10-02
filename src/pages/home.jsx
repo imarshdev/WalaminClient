@@ -16,13 +16,17 @@ function Home() {
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
   const navigate = useNavigate();
   useEffect(() => {
-    if (userData.isLoggedIn) {
-      console.log("logged in")
-    } else {
+    if (userData.isLoggedIn === false) {
       console.log("not logged in");
       navigate("/signin", { replace: true });
-      }
-  });
+    } else {
+      console.log("Logged in");
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    console.log("home userdata log", userData);
+  }, [userData]);
 
   // this is simply getting the current time at all times to ensure proper greeting of the current user
   useEffect(() => {
@@ -72,7 +76,7 @@ function Home() {
         >
           {/* greet the user */}
           <span style={{ fontSize: 18 }}>
-            {greeting} {userData.firstName} !
+            {greeting} {userData.firstName} !{userData.isLoggedIn}
           </span>
           <>
             {/* display date and time */}
