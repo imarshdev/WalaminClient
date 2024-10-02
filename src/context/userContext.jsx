@@ -8,7 +8,7 @@ const UserProvider = ({ children }) => {
     firstName: "",
     lastName: "",
     sex: "",
-    isLoggedIn: null,
+    isLoggedIn: false,
   });
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
