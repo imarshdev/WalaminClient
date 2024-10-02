@@ -16,10 +16,12 @@ function Home() {
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
   const navigate = useNavigate();
   useEffect(() => {
-    if (userData.isLoggedIn === false) {
+    if (userData.isLoggedIn) {
+      console.log("logged in")
+    } else {
       console.log("not logged in");
       navigate("/signin", { replace: true });
-    } 
+      }
   });
 
   // this is simply getting the current time at all times to ensure proper greeting of the current user
