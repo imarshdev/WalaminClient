@@ -107,7 +107,6 @@ function Home() {
               </span>
             </TouchableOpacity>
           </div>
-          <div className="image"></div>
         </div>
       </div>
       <div className="mid_details">
