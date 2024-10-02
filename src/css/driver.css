@@ -45,16 +45,16 @@
 }
 #ongoing-map{
   width: 100%;
-  height: 65%;
+  height: 55%;
   background-color: pink;
 }
 #ongoing-map-usage{
-  height: 35%;
+  height: 45%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: start;
-  justify-content: center;
+  justify-content: start;
   box-sizing: border-box;
   padding: 20px;
 }

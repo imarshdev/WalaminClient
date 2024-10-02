@@ -21,9 +21,6 @@ function Account() {
       <div className="account-options">
         <p style={{ width: "100%", textAlign: "start" }}>Your account</p>
         <TouchableOpacity id="account-option">
-          <span>Personal Information</span>
-        </TouchableOpacity>
-        <TouchableOpacity id="account-option">
           <span>Scheduled rides</span>
         </TouchableOpacity>
         <TouchableOpacity id="account-option">
@@ -36,8 +33,9 @@ function Account() {
         <TouchableOpacity id="account-option">
           <span>Become a captain</span>
         </TouchableOpacity>
-        <TouchableOpacity id="account-option">
-          <span>Rate this app</span>
+        <p style={{ width: "100%", textAlign: "start" }}>Log Out</p>
+        <TouchableOpacity id="account-option" style={{backgroundColor: 'orange'}}>
+          <span style={{color: "#fff"}}>Logout</span>
         </TouchableOpacity>
       </div>
       <Navigator />
