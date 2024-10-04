@@ -1,0 +1,83 @@
+.topper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 10px;
+  height: 25vh;
+  width: 100%;
+  background-color: limegreen;
+  box-shadow: 0px 0px 5px rgba(0, 100, 0, 0.486);
+}
+.widget {
+  width: 100%;
+  height: 65%;
+  background-color: #fff;
+  text-align: start;
+  box-sizing: border-box;
+  display: flex;
+}
+.text {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 3px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.image {
+  width: 30%;
+  height: 100%;
+}
+#refer-button {
+  background-color: limegreen;
+  width: 100%;
+  height: 40%;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mid_details {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mid_details_upper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  padding: 10px;
+  justify-content: space-between;
+  overflow: scroll;
+}
+#service_item {
+  width: 30%;
+  height: 6.5rem;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+#link_item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@font-face {
+  font-family: boldSans;
+  src: url(../assets/JosefinSans-Bold.ttf);
+}
+#service_item p {
+  font-family: boldSans;
+  font-size: 12px;
+}

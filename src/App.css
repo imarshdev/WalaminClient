@@ -1,0 +1,17 @@
+#root {
+  max-width: 1280px;
+  min-width: 100%;
+  margin: 0 auto;
+  padding: 0rem;
+  text-align: center;
+}
+@font-face {
+  font-family: sans;
+  src: url(./assets/JosefinSans-Regular.ttf);
+}
+p, h2, h1, span, a, h3{
+  font-family: sans;
+}
+.card {
+  padding: 2em;
+}

@@ -1,0 +1,34 @@
+.account-card {
+  width: 95%;
+  height: 5rem;
+  border-radius: 10px;
+  border: solid 0.5px rgba(50, 205, 50, 0.185);
+  background-color: rgba(245, 245, 245, 0.164);
+  box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.account-options {
+  width: 95%;
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 10px;
+  border: solid 0.5px rgba(50, 205, 50, 0.185);
+  background-color: rgba(245, 245, 245, 0.164);
+  box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.3);
+}
+#account-option {
+  width: 100%;
+  height: 3.5rem;
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  background-color: rgba(50, 205, 50, 0.185);
+  border: solid 1px rgb(0, 0, 0, 0.3);
+  margin-bottom: 10px;
+}
