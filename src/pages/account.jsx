@@ -1,13 +1,18 @@
 import React, { useContext } from "react";
 import "../css/account.css";
 import { TouchableOpacity } from "react-native-web";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHome, FaServicestack } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { UserContext } from "../context/userContext";
 
 function Account() {
-  const { userData } = useContext(UserContext);
+  const { userData, clearStorage } = useContext(UserContext);
+  const navigate = useNavigate();
+  const userLoggedOut = () => {
+    clearStorage();
+    navigate("/signin");
+  };
   return (
     <div className="container">
       <p>My Account</p>
@@ -34,8 +39,12 @@ function Account() {
           <span>Become a captain</span>
         </TouchableOpacity>
         <p style={{ width: "100%", textAlign: "start" }}>Log Out</p>
-        <TouchableOpacity id="account-option" style={{backgroundColor: 'orange'}}>
-          <span style={{color: "#fff"}}>Logout</span>
+        <TouchableOpacity
+          onPress={userLoggedOut}
+          id="account-option"
+          style={{ backgroundColor: "orange" }}
+        >
+          <span style={{ color: "#fff" }}>Logout</span>
         </TouchableOpacity>
       </div>
       <Navigator />

@@ -47,11 +47,8 @@ function Signin() {
   const handleUsernameChange = () => {
     const FirstName = firstNameRef.current.value;
     const LastName = lastNameRef.current.value;
-    if (FirstName === "" || LastName === "") {
-      setError("Enter user details");
-    } else {
-      setFirstname(FirstName);
-      setLastname(LastName);
+  
+    if (FirstName && LastName && contact) {
       setUserData({
         firstName: FirstName,
         lastName: LastName,
@@ -59,29 +56,19 @@ function Signin() {
         isLoggedIn: true,
       });
       setLoading(true);
-      navigate("/");
       setError("");
+    } else {
+      setError("Enter user details and phone number");
     }
   };
+  
 
   useEffect(() => {
     console.log("first userdata log", userData);
-    if (userData.isLoggedIn === true) {
+    if (userData && userData.isLoggedIn === true) {
       navigate("/");
     }
-  });
-
-  useLayoutEffect(() => {
-    if (firstname || lastname || contact) {
-      console.log("contact: ", contact);
-      console.log("firstname: ", firstname);
-      console.log("lastname: ", lastname);
-      console.log("second userdata log", userData);
-      setLoading(false);
-    } else {
-      console.log("didn't work");
-    }
-  });
+  }, [userData, navigate]);
 
   return (
     <div className="container" style={{ justifyContent: "space-around" }}>

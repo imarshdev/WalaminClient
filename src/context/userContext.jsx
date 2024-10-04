@@ -13,24 +13,38 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
-      setUserData(JSON.parse(storedData));
+      try {
+        setUserData(JSON.parse(storedData));
+      } catch (error) {
+        console.error("Error parsing stored data:", error);
+      }
     }
   }, []);
 
   useEffect(() => {
-    // Only store in localStorage if the user is logged in or if the data has meaningful content
     if (
-      userData.isLoggedIn ||
-      userData.contact ||
-      userData.firstName ||
-      userData.lastName
+      userData &&
+      (userData.isLoggedIn ||
+        userData.contact ||
+        userData.firstName ||
+        userData.lastName)
     ) {
       localStorage.setItem("userData", JSON.stringify(userData));
     }
   }, [userData]);
 
+  const clearStorage = () => {
+    localStorage.removeItem("userData");
+    setUserData({
+      contact: "",
+      firstName: "",
+      lastName: "",
+      isLoggedIn: false,
+    });
+  };
+
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, clearStorage }}>
       {children}
     </UserContext.Provider>
   );
