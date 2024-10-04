@@ -7,7 +7,7 @@ const UserProvider = ({ children }) => {
     contact: "",
     firstName: "",
     lastName: "",
-    isLoggedIn: null,
+    isLoggedIn: false,
   });
 
   useEffect(() => {
