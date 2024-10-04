@@ -66,7 +66,7 @@ function Signin() {
 
   useEffect(() => {
     console.log("first userdata log", userData);
-    if (userData.isLoggedIn == true) {
+    if (userData.isLoggedIn === true) {
       navigate("/");
     }
   });
