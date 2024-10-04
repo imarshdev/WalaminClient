@@ -25,7 +25,7 @@ function DriverRideList() {
     };
   }, []);
 
-  const mapContainerRef = useRef()
+  const mapContainerRef = useRef();
   const sendReaction = (cardSender) => {
     console.log("sending reaction");
     const reactorName = userName;
@@ -44,6 +44,8 @@ function DriverRideList() {
       zoom: 14,
       attributionControl: false,
     });
+
+    new mapboxgl.Marker().setLngLat([32.5816, 0.3152]).addTo(map);
 
     return () => map.remove();
   }, []);
@@ -69,7 +71,12 @@ function DriverRideList() {
         }}
       >
         <div id="top-shadow"></div>
-        <div id="ongoing-map" ref={mapContainerRef} style={{height: '100%'}}></div>
+        <div style={{width: "100%", height: "55vh"}}>
+        <div
+          id="ongoing-map"
+          ref={mapContainerRef}
+        ></div>
+        </div>
         <div id="ongoing-map-usage">
           <p>Progress</p>
           <span>2/4km and an approximated 3 mins to go!!</span>
