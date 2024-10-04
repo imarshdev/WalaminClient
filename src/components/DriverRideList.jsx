@@ -25,11 +25,28 @@ function DriverRideList() {
     };
   }, []);
 
+  const mapContainerRef = useRef()
   const sendReaction = (cardSender) => {
     console.log("sending reaction");
     const reactorName = userName;
     socket.emit("reaction", { cardSender, reactorName });
   };
+
+  useEffect(() => {
+    const mapboxgl = window.mapboxgl;
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg";
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [32.5816, 0.3152],
+      zoom: 14,
+      attributionControl: false,
+    });
+
+    return () => map.remove();
+  }, []);
   return (
     <div className="rider-container">
       <h2>Available Rides</h2>
@@ -52,7 +69,7 @@ function DriverRideList() {
         }}
       >
         <div id="top-shadow"></div>
-        <div id="ongoing-map"></div>
+        <div id="ongoing-map" ref={mapContainerRef} style={{height: '55%'}}></div>
         <div id="ongoing-map-usage">
           <p>Progress</p>
           <span>2/4km and an approximated 3 mins to go!!</span>
