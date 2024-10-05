@@ -4,19 +4,20 @@ import "../css/driver.css";
 import io from "socket.io-client";
 import { UserContext } from "../context/userContext";
 import { MdLocationOn, MdTripOrigin } from "react-icons/md";
+
 const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
-  const { userData, setUserData } = useContext(UserContext);
-  const [userName, setUsername] = useState(userData.firstName);
-  const [rideaccepted, setRideaccepted] = useState(false);
+  const { userData } = useContext(UserContext);
+  const [userName] = useState(userData.firstName);
+  const [rideAccepted, setRideAccepted] = useState(false);
   const [rideStarted, setRideStarted] = useState(false);
   const [cards, setCards] = useState([]);
+  const [activeRide, setActiveRide] = useState(null); // To store the active ride details
 
   useEffect(() => {
     socket.on("recieveCard", (data) => {
-      console.log("data recieved");
-      console.log(data.username);
+      console.log("data received", data);
       setCards((prevCards) => [...prevCards, data]);
     });
 
@@ -25,30 +26,27 @@ function DriverRideList() {
     };
   }, []);
 
-  const mapContainerRef = useRef();
-  const sendReaction = (cardSender) => {
+  const sendReaction = (card) => {
     console.log("sending reaction");
     const reactorName = userName;
-    socket.emit("reaction", { cardSender, reactorName });
+    socket.emit("reaction", { cardSender: card.senderId, reactorName });
+
+    // When a ride is accepted, store the ride data and open the ride-accepted section
+    setActiveRide(card);
+    setRideAccepted(true);
   };
 
-  useEffect(() => {
-    const mapboxgl = window.mapboxgl;
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg";
+  const updateRideStatus = (status) => {
+    console.log("updating ride status");
+    if (activeRide) {
+      socket.emit("updateRideStatus", {
+        cardSender: activeRide.senderId,
+        status,
+        reactorName: activeRide.reactorName || "Rider",
+      });
+    }
+  };
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [32.5816, 0.3152],
-      zoom: 14,
-      attributionControl: false,
-    });
-
-    new mapboxgl.Marker().setLngLat([32.5816, 0.3152]).addTo(map);
-
-    return () => map.remove();
-  }, []);
   return (
     <div className="rider-container">
       <h2>Available Rides</h2>
@@ -58,24 +56,28 @@ function DriverRideList() {
           <RideCard key={index} card={card} sendReaction={sendReaction} />
         ))}
       </div>
-      <TouchableOpacity
-        id="ongoing-map-buttons"
-        onPress={() => setRideaccepted(true)}
-      >
-        <p>Open ride</p>
-      </TouchableOpacity>
+
+      {/* Ride-accepted section */}
       <div
         className="ride-accepted"
         style={{
-          height: rideaccepted ? "100vh" : 0,
+          height: rideAccepted ? "100vh" : 0,
         }}
       >
         <div id="top-shadow"></div>
-        <div style={{width: "100%", height: "55vh"}}>
-        <div
-          id="ongoing-map"
-          ref={mapContainerRef}
-        ></div>
+        <div style={{ width: "100%", height: "55vh" }}>
+          <div
+            id="ongoing-map"
+            ref={useRef()}
+            style={{ width: "100%", height: "100%" }}
+          >
+            {activeRide && (
+              <RideMap
+                userLat={activeRide.userLat}
+                userLng={activeRide.userLng}
+              />
+            )}
+          </div>
         </div>
         <div id="ongoing-map-usage">
           <p>Progress</p>
@@ -87,33 +89,39 @@ function DriverRideList() {
           <br />
           <p>
             <MdTripOrigin style={{ marginRight: "5px" }} /> from :{" "}
-            {"4R Ntinda Rd, Kampala Uganda"}
+            {activeRide ? activeRide.shortUserlocation : "Unknown location"}
           </p>
           <p>
             <MdLocationOn style={{ marginRight: "5px" }} />
-            to : {"Acacia Mall, Cooper Rd, Kampala Uganda"}
+            to : {activeRide ? activeRide.location : "Unknown destination"}
           </p>
           <div id="actions">
             <TouchableOpacity
               id="ongoing-map-buttons"
-              onPress={() => setRideStarted(true)}
+              onPress={() => {
+                setRideStarted(true);
+                updateRideStatus("Ride Started");
+              }}
             >
               <span>{rideStarted ? "on Ride" : "start ride"}</span>
             </TouchableOpacity>
             <TouchableOpacity
               id="ongoing-map-buttons"
-              onPress={() => setRideaccepted(false)}
+              onPress={() => {
+                setRideAccepted(false);
+                updateRideStatus("Ride Ended");
+              }}
             >
               <span>End ride</span>
             </TouchableOpacity>
-          </div>{" "}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function RideCard({ card, sendReaction, sendMessage, messages }) {
+function RideCard({ card, sendReaction }) {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -135,15 +143,6 @@ function RideCard({ card, sendReaction, sendMessage, messages }) {
     }
   }, [card.userLat, card.userLng]);
 
-  const updateRideStatus = (status) => {
-    console.log("updating ride status");
-    socket.emit("updateRideStatus", {
-      cardSender: card.senderId,
-      status,
-      reactorName: card.reactorName || "Rider",
-    });
-  };
-
   return (
     <div className="ride-container">
       <span>Username: {card.username}</span>
@@ -162,28 +161,44 @@ function RideCard({ card, sendReaction, sendMessage, messages }) {
       <TouchableOpacity
         id="result-button"
         style={{ marginTop: "10px" }}
-        onPress={() => sendReaction(card.senderId)}
+        onPress={() => sendReaction(card)}
       >
         <p>Accept</p>
       </TouchableOpacity>
       <TouchableOpacity
         style={{ backgroundColor: "red" }}
         id="result-button"
-        onPress={() => updateRideStatus("Rider has arrived")}
+        onPress={() => sendReaction(card)} // Example for another status
       >
-        <p>Slide to arrive</p>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ backgroundColor: "red" }}
-        id="result-button"
-        onPress={() => updateRideStatus("Ride Ended")}
-      >
-        <p>End Ride</p>
-      </TouchableOpacity>
-      <TouchableOpacity style={{ backgroundColor: "red" }} id="result-button">
         <p>Decline</p>
       </TouchableOpacity>
     </div>
+  );
+}
+
+function RideMap({ userLat, userLng }) {
+  const mapContainerRef = useRef(null);
+
+  useEffect(() => {
+    const mapboxgl = window.mapboxgl;
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg";
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [userLng, userLat],
+      zoom: 14,
+      attributionControl: false,
+    });
+
+    new mapboxgl.Marker().setLngLat([userLng, userLat]).addTo(map);
+
+    return () => map.remove();
+  }, [userLat, userLng]);
+
+  return (
+    <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
   );
 }
 
