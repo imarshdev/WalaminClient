@@ -38,6 +38,7 @@ function RideRequestForm() {
   }, []);
   useEffect(() => {
     socket.on("rideStatusUpdate", (data) => {
+      console.log("status updated");
       console.log("status updated:", data.status);
       setRideStatus(data.status);
     });

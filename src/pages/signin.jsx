@@ -47,7 +47,7 @@ function Signin() {
   const handleUsernameChange = () => {
     const FirstName = firstNameRef.current.value;
     const LastName = lastNameRef.current.value;
-  
+
     if (FirstName && LastName && contact) {
       setUserData({
         firstName: FirstName,
@@ -61,7 +61,6 @@ function Signin() {
       setError("Enter user details and phone number");
     }
   };
-  
 
   useEffect(() => {
     console.log("first userdata log", userData);
@@ -86,6 +85,7 @@ function Signin() {
               type="number"
               placeholder="000 000 000"
               inputMode="numeric"
+              autoFocus={true}
               style={{ backgroundColor: "#eff2fb", width: "100%" }}
             />
           </div>
@@ -109,6 +109,7 @@ function Signin() {
               ref={firstNameRef}
               type="text"
               required
+              autoFocus={true}
               style={{ backgroundColor: "#eff2fb", width: "100%" }}
             />
           </div>

@@ -161,6 +161,9 @@ textarea {
   align-items: center;
   width: 30vw;
 }
+button:focus {
+  outline: none;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

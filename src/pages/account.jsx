@@ -1,17 +1,50 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "../css/account.css";
 import { TouchableOpacity } from "react-native-web";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHome, FaServicestack } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { UserContext } from "../context/userContext";
+import { SlCalender } from "react-icons/sl";
+
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { MdOutlineQuestionAnswer, MdChangeHistory } from "react-icons/md";
+import { BiSupport } from "react-icons/bi";
 
 function Account() {
+  const [visible, setVisible] = useState(false);
+  const cancelled = () => {
+    setVisible(false);
+  };
+  const confirmedLogout = () => {
+    clearStorage();
+    navigate("/signin");
+  };
+
+  const footerContent = (
+    <div
+      style={{ width: "100%", justifyContent: "space-around", display: "flex" }}
+    >
+      <Button
+        label="No"
+        icon="pi pi-times"
+        onClick={cancelled}
+        className="p-button-text"
+        style={{ width: "40%", height: "3rem" }}
+      />
+      <Button
+        label="Yes"
+        icon="pi pi-check"
+        onClick={confirmedLogout}
+        style={{ width: "50%", height: "3rem", backgroundColor: "limegreen" }}
+      />
+    </div>
+  );
   const { userData, clearStorage } = useContext(UserContext);
   const navigate = useNavigate();
   const userLoggedOut = () => {
-    clearStorage();
-    navigate("/signin");
+    setVisible(true);
   };
   return (
     <div className="container">
@@ -26,17 +59,27 @@ function Account() {
       <div className="account-options">
         <p style={{ width: "100%", textAlign: "start" }}>Your account</p>
         <TouchableOpacity id="account-option">
-          <span>Scheduled rides</span>
+          <span>
+            <SlCalender style={{marginRight: "1rem"}} />
+            Scheduled rides
+          </span>
         </TouchableOpacity>
         <TouchableOpacity id="account-option">
-          <span>Ride History</span>
+          <span>
+            <MdChangeHistory style={{marginRight: "1rem"}} />
+            Ride History
+          </span>
         </TouchableOpacity>
         <p style={{ width: "100%", textAlign: "start" }}>Support</p>
         <TouchableOpacity id="account-option">
-          <span>Contact Support</span>
+          <span>
+            <BiSupport style={{marginRight: "1rem"}} />
+            Contact Support</span>
         </TouchableOpacity>
         <TouchableOpacity id="account-option">
-          <span>Become a captain</span>
+          <span>
+            <GiFullMotorcycleHelmet style={{marginRight: "1rem"}} />
+            Become a captain</span>
         </TouchableOpacity>
         <p style={{ width: "100%", textAlign: "start" }}>Log Out</p>
         <TouchableOpacity
@@ -46,6 +89,27 @@ function Account() {
         >
           <span style={{ color: "#fff" }}>Logout</span>
         </TouchableOpacity>
+        <Dialog
+          visible={visible}
+          style={{
+            width: "95%",
+            backgroundColor: "#fff",
+            padding: "30px 20px",
+            boxSizing: "border-box",
+            height: "40vh",
+            borderRadius: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+          footer={footerContent}
+        >
+          <MdOutlineQuestionAnswer size={70} color="limegreen" />
+          <p className="m-0">Are you sure you want bail ?</p>
+        </Dialog>
       </div>
       <Navigator />
     </div>
