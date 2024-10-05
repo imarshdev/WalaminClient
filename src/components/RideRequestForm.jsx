@@ -1,8 +1,3 @@
-// this is the search thing
-// here we search for the destination location
-/*
-  FULL EXPLANAION
-*/
 import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
 import "react-spring-bottom-sheet/dist/style.css";
@@ -40,6 +35,8 @@ function RideRequestForm() {
     socket.on("rideStatusUpdate", (data) => {
       console.log("status updated");
       console.log("status updated:", data.status);
+      setRideSheet(true)
+      setResultSheet(false)
       setRideStatus(data.status);
     });
     return () => {
@@ -54,12 +51,12 @@ function RideRequestForm() {
   const [costSheetOpen, setCostSheetOpen] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [resultSheet, setResultSheet] = useState(false);
+  const [rideSheet, setRideSheet] = useState(false);
   const [result, setresult] = useState(true);
   const inputRef = useRef();
   const navigate = useNavigate();
-  const back = () => {
-    navigate("/");
-  };
+  const back = () => navigate("/");
+
   useEffect(() => {
     const handleScroll = () => window.scrollTo(0, 0);
     window.addEventListener("scroll", handleScroll);
@@ -338,6 +335,29 @@ function RideRequestForm() {
             <p> Sorry, we have no riders available at the moment</p>
           </div>
         )}
+      </BottomSheet>
+      <BottomSheet
+        blocking={false}
+        open={rideSheet}
+        snapPoints={({ minHeight }) => [minHeight]}
+      >
+        <div className="result" style={{ height: "auto" }}>
+          {rideStatus === "arived" ? (
+            <p>Your captain {notification} has arrived</p>
+          ) : rideStatus === "started" ? (
+            <p>Your ride has started</p>
+          ) : (
+            rideStatus === "ended" && <p>Your ride has ended</p>
+          )}
+          <div className="driver-details">
+            <p>Name: {notification}</p>
+            <p>Bajaj 120, lemon green</p>
+            <p>UFU171C</p>
+          </div>
+          <br />
+          <br />
+          <div className="action-container"></div>
+        </div>
       </BottomSheet>
     </div>
   );
