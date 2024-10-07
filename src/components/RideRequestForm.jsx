@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
 import "react-spring-bottom-sheet/dist/style.css";
-import locationsData from "../locations/filteredlocations.json";
+import locationsData from "../locations/filteredLocations.json";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import { TouchableOpacity } from "react-native-web";
 import { MdLocationOn } from "react-icons/md";

@@ -9,6 +9,9 @@ export default defineConfig({
     alias: {
       'react-native': 'react-native-web',
     },
+    alias: {
+      '@': '/src'
+    },
   },
   plugins: [react(), VitePWA({
     strategies: 'injectManifest',
