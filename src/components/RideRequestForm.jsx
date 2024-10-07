@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
 import "react-spring-bottom-sheet/dist/style.css";
+import locationsData from "../locations/filteredlocations.json";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import { TouchableOpacity } from "react-native-web";
 import { MdLocationOn } from "react-icons/md";
@@ -10,6 +11,25 @@ import io from "socket.io-client";
 import { UserContext } from "../context/userContext";
 const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
+  const [inputValue, setInputValue] = useState("");
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  useEffect(() => {
+    if (inputValue) {
+      const results = locationsData.filter((location) =>
+        location.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setFilteredLocations(results.slice(0, 6)); // Limit results to 6
+    } else {
+      setFilteredLocations([]);
+    }
+  }, [inputValue]);
+  const handleSelect = (location) => {
+    setInputValue(location.name);
+    setLocation(location)
+    console.log(location.name);
+    setFilteredLocations([]);
+  };
+
   const mapContainerRef = useRef(null);
   const { userData, setUserData } = useContext(UserContext);
   const [notification, setNotification] = useState("");
@@ -35,8 +55,8 @@ function RideRequestForm() {
     socket.on("rideStatusUpdate", (data) => {
       console.log("status updated");
       console.log("status updated:", data.status);
-      setRideSheet(true)
-      setResultSheet(false)
+      setRideSheet(true);
+      setResultSheet(false);
       setRideStatus(data.status);
     });
     return () => {
@@ -79,6 +99,10 @@ function RideRequestForm() {
     }
   };
 
+  function truncateText(text, length) {
+    return text.substring(0, length) + (text.length > length ? "…" : "");
+  }
+
   const inputFocused = () => {
     setSearching(true);
   };
@@ -88,10 +112,10 @@ function RideRequestForm() {
     }, 100);
     setMapHeight(false);
     setSearching(false);
-    setLocation(inputRef.current.value);
   };
-  const inputChanging = () => {
+  const inputChanging = (event) => {
     setTyping(true);
+    setInputValue(event.target.value);
   };
   const locationSelected = () => {
     setMapHeight(true);
@@ -212,6 +236,7 @@ function RideRequestForm() {
               type="text"
               className="location-input"
               ref={inputRef}
+              value={inputValue}
               onFocus={inputFocused}
               onChange={inputChanging}
               onBlur={inputUnFocused}
@@ -220,10 +245,26 @@ function RideRequestForm() {
         }
       >
         {typing ? (
-          <TouchableOpacity id="location-item">
-            <MdLocationOn size={20} style={{ marginRight: "15px" }} />
-            <span>formatted Address</span>
-          </TouchableOpacity>
+          <>
+            {filteredLocations.length > 0 && (
+              <>
+                {filteredLocations.map((location, index) => (
+                  <TouchableOpacity
+                    id="location-item"
+                    key={index}
+                    onPress={() => handleSelect(location)}
+                  >
+                    <MdLocationOn size={20} style={{ marginRight: "15px" }} />
+                    <span>
+                      {truncateText(location.name, 30)}
+                      <br />
+                      {truncateText(location.address, 30)}
+                    </span>
+                  </TouchableOpacity>
+                ))}
+              </>
+            )}
+          </>
         ) : typing === false ? (
           <>
             <p>Saved</p>
