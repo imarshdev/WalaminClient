@@ -13,7 +13,7 @@ function DriverRideList() {
   const [rideAccepted, setRideAccepted] = useState(false);
   const [rideStarted, setRideStarted] = useState(false);
   const [cards, setCards] = useState([]);
-  const [arrived, setArrived]= useState(false)
+  const [arrived, setArrived] = useState(false);
   const [activeRide, setActiveRide] = useState(null); // To store the active ride details
 
   useEffect(() => {
@@ -66,18 +66,18 @@ function DriverRideList() {
         }}
       >
         <div id="top-shadow"></div>
-          <div
-            id="ongoing-map"
-            ref={useRef()}
-            style={{ width: "100%", height: "55vh" }}
-          >
-            {activeRide && (
-              <RideMap
-                userLat={activeRide.userLat}
-                userLng={activeRide.userLng}
-              />
-            )}
-          </div>
+        <div
+          id="ongoing-map"
+          ref={useRef()}
+          style={{ width: "100%", height: "55vh" }}
+        >
+          {activeRide && (
+            <RideMap
+              userLat={activeRide.userLat}
+              userLng={activeRide.userLng}
+            />
+          )}
+        </div>
         <div id="ongoing-map-usage">
           <p>Progress</p>
           <span>2/4km and an approximated 3 mins to go!!</span>
@@ -124,7 +124,7 @@ function DriverRideList() {
               id="ongoing-map-buttons"
               onPress={() => {
                 setRideAccepted(false);
-                setRideStarted(false)
+                setRideStarted(false);
                 updateRideStatus("Ride Ended");
               }}
             >
@@ -214,7 +214,9 @@ function RideMap({ userLat, userLng }) {
   }, [userLat, userLng]);
 
   return (
-    <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+    <div style={{ height: "55vh", width: "100%" }}>
+      <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+    </div>
   );
 }
 
