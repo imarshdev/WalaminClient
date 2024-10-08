@@ -8,6 +8,7 @@ import { MdLocationOn } from "react-icons/md";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { getDistance } from "geolib";
 import { UserContext } from "../context/userContext";
 const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
@@ -29,7 +30,6 @@ function RideRequestForm() {
     console.log(location.name);
     setFilteredLocations([]);
   };
-
   const mapContainerRef = useRef(null);
   const { userData, setUserData } = useContext(UserContext);
   const [notification, setNotification] = useState("");
@@ -73,6 +73,9 @@ function RideRequestForm() {
   const [resultSheet, setResultSheet] = useState(false);
   const [rideSheet, setRideSheet] = useState(false);
   const [result, setresult] = useState(true);
+  const [LocationSelected, setLocationSelected] = useState(false);
+  const [directions, setDirections] = useState();
+  const [cost, setCost] = useState();
   const inputRef = useRef();
   const navigate = useNavigate();
   const back = () => navigate("/");
@@ -93,6 +96,7 @@ function RideRequestForm() {
         userLocation,
         shortUserlocation,
         location,
+        cost,
         senderId: socket.id,
       };
       socket.emit("sendCard", cardData);
@@ -121,6 +125,11 @@ function RideRequestForm() {
     setMapHeight(true);
     setOpen(false);
     setCostSheetOpen(true);
+    setLocationSelected(true);
+    if (location) {
+      directions.setOrigin([userLng, userLat]);
+      directions.setDestination([location.location.lng, location.location.lat]);
+    }
   };
   const declined = () => {
     setOpen(true);
@@ -130,10 +139,7 @@ function RideRequestForm() {
   };
   useEffect(() => {
     if (rideStatus === "Ride Ended") {
-      setOpen(true);
-      setTyping(false);
-      setCostSheetOpen(false);
-      setResultSheet(false);
+      window.location.reload();
     }
   }, [rideStatus]);
   const ordered = () => {
@@ -143,11 +149,11 @@ function RideRequestForm() {
   useEffect(() => {
     if (location) {
       console.log(location);
-      console.log(userLocation);
+      console.log("userlocation", userLocation);
       console.log(contact);
       console.log(username);
     }
-  });
+  }, [location]);
   useEffect(() => {
     const getLocation = async () => {
       navigator.geolocation.getCurrentPosition(
@@ -186,7 +192,7 @@ function RideRequestForm() {
     };
 
     getLocation();
-  }, [setUserLat, setUserLng, setUserLocation]); // Add dependencies for useEffect
+  }, []); // Add dependencies for useEffect
 
   useEffect(() => {
     console.log("userplace name", userLocation);
@@ -209,9 +215,51 @@ function RideRequestForm() {
         lat: userLat,
       });
       marker.addTo(map);
+
+      const directions = new window.MapboxDirections({
+        accessToken:
+          "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg",
+        unit: "metric",
+        profile: "mapbox/walking",
+        alternatives: false,
+        geometries: "geojson",
+        controls: { instructions: false, inputs: false },
+        flyTo: true,
+      });
+
+      if (LocationSelected) {
+        const userLocation = { latitude: userLat, longitude: userLng };
+        const destination = {
+          latitude: location.location.lat,
+          longitude: location.location.lng,
+        };
+        const distance = getDistance(userLocation, destination);
+        console.log(`distance: ${distance} meters`);
+        const zoom = Math.floor(Math.log2(40075 / distance)) + 1;
+        console.log(`Required zoom level: ${zoom}`);
+        const price = 1000 + ((distance / 1000 - 2) / 0.5) * 500;
+        console.log(`${price} shs`);
+        setCost(price)
+      }
+
+      map.addControl(directions);
+      setDirections(directions);
+
+      const updateMapCenter = (lng, lat) => {
+        map.flyTo({ center: [lng, lat], zoom: 15 });
+        marker.setLngLat([lng, lat]);
+      };
+      if (location) {
+        updateMapCenter(location.location.lng, location.location.lat);
+      }
       return () => map.remove();
     }
-  }, [userLat, userLng]);
+  }, [userLat, userLng, location, LocationSelected]);
+  useEffect(() => {
+    if (location) {
+      console.log("location object", location);
+    }
+  }, [location]);
   return (
     <div
       className="container2"
@@ -327,25 +375,19 @@ function RideRequestForm() {
         ) : (
           <div className="cost-estimate">
             <div className="price-container">
-              <h2 style={{ color: "#fff" }}>Cost: 4500.oo shs</h2>
+              <h2 style={{ color: "#fff" }}>Cost: {cost}.oo shs</h2>
               <span style={{ color: "#fff" }}>Go walamin, go green</span>
             </div>
             <p className="pick-up">
               <MdLocationOn /> Pick-up: <br />
               <br />
-              <span className="location-span">
-                4 Port Bell Road, Kampala, Uganda
-              </span>
+              <span className="location-span">{userLocation}</span>
             </p>
-            <hr style={{ color: "green" }} />
             <p className="drop-off">
               <MdLocationOn /> Destination: <br />
               <br />
-              <span className="location-span">
-                Acacia Mall, Cooper Road, Wilaya ya, Kampala, Uganda
-              </span>
+              <span className="location-span">{location.name}</span>
             </p>
-            <br />
             <div className="action-container">
               <TouchableOpacity onPress={declined} id="decline">
                 <p style={{ color: "#fff" }}>Decline</p>
