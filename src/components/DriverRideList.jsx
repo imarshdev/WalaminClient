@@ -66,11 +66,10 @@ function DriverRideList() {
         }}
       >
         <div id="top-shadow"></div>
-        <div style={{ width: "100%", height: "55vh" }}>
           <div
             id="ongoing-map"
             ref={useRef()}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "55vh" }}
           >
             {activeRide && (
               <RideMap
@@ -79,7 +78,6 @@ function DriverRideList() {
               />
             )}
           </div>
-        </div>
         <div id="ongoing-map-usage">
           <p>Progress</p>
           <span>2/4km and an approximated 3 mins to go!!</span>
