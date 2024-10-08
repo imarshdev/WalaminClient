@@ -124,6 +124,7 @@ function DriverRideList() {
               id="ongoing-map-buttons"
               onPress={() => {
                 setRideAccepted(false);
+                setRideStarted(false)
                 updateRideStatus("Ride Ended");
               }}
             >
