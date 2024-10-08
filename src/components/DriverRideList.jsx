@@ -13,6 +13,7 @@ function DriverRideList() {
   const [rideAccepted, setRideAccepted] = useState(false);
   const [rideStarted, setRideStarted] = useState(false);
   const [cards, setCards] = useState([]);
+  const [arrived, setArrived]= useState(false)
   const [activeRide, setActiveRide] = useState(null); // To store the active ride details
 
   useEffect(() => {
@@ -96,15 +97,31 @@ function DriverRideList() {
             to : {activeRide ? activeRide.location.name : "Unknown destination"}
           </p>
           <div id="actions">
-            <TouchableOpacity
-              id="ongoing-map-buttons"
-              onPress={() => {
-                setRideStarted(true);
-                updateRideStatus("Ride Started");
-              }}
-            >
-              <span>{rideStarted ? "on Ride" : "start ride"}</span>
-            </TouchableOpacity>
+            {arrived ? (
+              <>
+                <TouchableOpacity
+                  id="ongoing-map-buttons"
+                  onPress={() => {
+                    setRideStarted(true);
+                    updateRideStatus("Ride Started");
+                  }}
+                >
+                  <span>{rideStarted ? "on Ride" : "start ride"}</span>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  id="ongoing-map-buttons"
+                  onPress={() => {
+                    setArrived(true);
+                    updateRideStatus("Rider Arrived");
+                  }}
+                >
+                  <span>Click to Arrive</span>
+                </TouchableOpacity>
+              </>
+            )}
             <TouchableOpacity
               id="ongoing-map-buttons"
               onPress={() => {

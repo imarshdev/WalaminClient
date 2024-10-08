@@ -383,12 +383,12 @@ function RideRequestForm() {
         snapPoints={({ minHeight }) => [minHeight]}
       >
         <div className="result" style={{ height: "auto" }}>
-          {rideStatus === "arived" ? (
+          {rideStatus === "Rider Arrived" ? (
             <p>Your captain {notification} has arrived</p>
-          ) : rideStatus === "started" ? (
+          ) : rideStatus === "Ride Started" ? (
             <p>Your ride has started</p>
           ) : (
-            rideStatus === "ended" && <p>Your ride has ended</p>
+            rideStatus === "Ride Ended" && <p>Your ride has ended</p>
           )}
           <div className="driver-details">
             <p>Name: {notification}</p>
