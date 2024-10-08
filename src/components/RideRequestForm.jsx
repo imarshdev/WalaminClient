@@ -63,6 +63,7 @@ function RideRequestForm() {
       socket.off("rideStatusUpdate");
     };
   });
+  const [map, setMap] = useState();
   const [open, setOpen] = useState(true);
   const [searching, setSearching] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -76,6 +77,7 @@ function RideRequestForm() {
   const [LocationSelected, setLocationSelected] = useState(false);
   const [directions, setDirections] = useState();
   const [cost, setCost] = useState();
+  const [zoom, setZoom] = useState(15);
   const inputRef = useRef();
   const navigate = useNavigate();
   const back = () => navigate("/");
@@ -129,6 +131,8 @@ function RideRequestForm() {
     if (location) {
       directions.setOrigin([userLng, userLat]);
       directions.setDestination([location.location.lng, location.location.lat]);
+      map.setZoom(zoom);
+      console.log(`zoom level: ${zoom}`);
     }
   };
   const declined = () => {
@@ -136,6 +140,7 @@ function RideRequestForm() {
     setTyping(false);
     setCostSheetOpen(false);
     setResultSheet(false);
+    window.location.reload();
   };
   useEffect(() => {
     if (rideStatus === "Ride Ended") {
@@ -210,6 +215,7 @@ function RideRequestForm() {
         zoom: 15, // Starting zoom level
         attributionControl: false,
       });
+      setMap(map);
       const marker = new mapboxgl.Marker().setLngLat({
         lng: userLng,
         lat: userLat,
@@ -246,21 +252,32 @@ function RideRequestForm() {
     }
   }, [location]);
   useEffect(() => {
-    if (LocationSelected) {
+    if (location) {
       const userLocation = { latitude: userLat, longitude: userLng };
       const destination = {
         latitude: location.location.lat,
         longitude: location.location.lng,
       };
       const distance = getDistance(userLocation, destination);
+      const distanceinKm = (distance / 1000).toFixed(1);
       console.log(`distance: ${distance} meters`);
+      console.log(`distance: ${distanceinKm} km`);
+      if (distanceinKm <= 2) setZoom(14);
+      else if (distanceinKm <= 4) setZoom(13);
+      else if (distanceinKm <= 6) setZoom(12);
+      else if (distanceinKm <= 8) setZoom(11);
+      else if (distanceinKm <= 10) setZoom(10);
+      else {
+        // For distances greater than 10km, decrease zoom level by 1 for every 2km
+        setZoom(Math.max(8, 10 - Math.floor((distanceinKm - 10) / 2)));
+      }
       const zoom = Math.floor(Math.log2(40075 / distance)) + 1;
       console.log(`Required zoom level: ${zoom}`);
       const price = 1000 + ((distance / 1000 - 2) / 0.5) * 500;
       console.log(`${price} shs`);
       setCost(price);
     }
-  }, [LocationSelected]);
+  }, [location]);
   return (
     <div
       className="container2"
