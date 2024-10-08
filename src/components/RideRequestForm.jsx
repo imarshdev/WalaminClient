@@ -25,7 +25,7 @@ function RideRequestForm() {
   }, [inputValue]);
   const handleSelect = (location) => {
     setInputValue(location.name);
-    setLocation(location)
+    setLocation(location);
     console.log(location.name);
     setFilteredLocations([]);
   };
@@ -128,6 +128,14 @@ function RideRequestForm() {
     setCostSheetOpen(false);
     setResultSheet(false);
   };
+  useEffect(() => {
+    if (rideStatus === "Ride Ended") {
+      setOpen(true);
+      setTyping(false);
+      setCostSheetOpen(false);
+      setResultSheet(false);
+    }
+  }, [rideStatus]);
   const ordered = () => {
     SendRide();
     setWaiting(true);
