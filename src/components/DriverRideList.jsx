@@ -165,6 +165,7 @@ function RideCard({ card, sendReaction }) {
       <span>Contact: {card.contact}</span>
       <span>Pickup: {card.shortUserlocation}</span>
       <span>Destination: {card.location.name}</span>
+      <span>Cost: {card.cost}.shs</span>
       <div
         ref={mapContainerRef}
         style={{

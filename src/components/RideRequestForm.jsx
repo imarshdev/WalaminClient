@@ -227,21 +227,6 @@ function RideRequestForm() {
         flyTo: true,
       });
 
-      if (LocationSelected) {
-        const userLocation = { latitude: userLat, longitude: userLng };
-        const destination = {
-          latitude: location.location.lat,
-          longitude: location.location.lng,
-        };
-        const distance = getDistance(userLocation, destination);
-        console.log(`distance: ${distance} meters`);
-        const zoom = Math.floor(Math.log2(40075 / distance)) + 1;
-        console.log(`Required zoom level: ${zoom}`);
-        const price = 1000 + ((distance / 1000 - 2) / 0.5) * 500;
-        console.log(`${price} shs`);
-        setCost(price)
-      }
-
       map.addControl(directions);
       setDirections(directions);
 
@@ -254,12 +239,28 @@ function RideRequestForm() {
       }
       return () => map.remove();
     }
-  }, [userLat, userLng, location, LocationSelected]);
+  }, [userLat, userLng, location]);
   useEffect(() => {
     if (location) {
       console.log("location object", location);
     }
   }, [location]);
+  useEffect(() => {
+    if (LocationSelected) {
+      const userLocation = { latitude: userLat, longitude: userLng };
+      const destination = {
+        latitude: location.location.lat,
+        longitude: location.location.lng,
+      };
+      const distance = getDistance(userLocation, destination);
+      console.log(`distance: ${distance} meters`);
+      const zoom = Math.floor(Math.log2(40075 / distance)) + 1;
+      console.log(`Required zoom level: ${zoom}`);
+      const price = 1000 + ((distance / 1000 - 2) / 0.5) * 500;
+      console.log(`${price} shs`);
+      setCost(price);
+    }
+  }, [LocationSelected]);
   return (
     <div
       className="container2"
