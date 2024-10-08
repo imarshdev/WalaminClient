@@ -93,7 +93,7 @@ function DriverRideList() {
           </p>
           <p>
             <MdLocationOn style={{ marginRight: "5px" }} />
-            to : {activeRide ? activeRide.location : "Unknown destination"}
+            to : {activeRide ? activeRide.location.name : "Unknown destination"}
           </p>
           <div id="actions">
             <TouchableOpacity
