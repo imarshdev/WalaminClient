@@ -78,6 +78,8 @@ function RideRequestForm() {
   const [directions, setDirections] = useState();
   const [cost, setCost] = useState();
   const [zoom, setZoom] = useState(15);
+  const [centerLat, setCenterLat] = useState();
+  const [centerLng, setCenterLng] = useState();
   const inputRef = useRef();
   const navigate = useNavigate();
   const back = () => navigate("/");
@@ -131,7 +133,40 @@ function RideRequestForm() {
     if (location) {
       directions.setOrigin([userLng, userLat]);
       directions.setDestination([location.location.lng, location.location.lat]);
-      map.setZoom(zoom);
+      directions.on("route", (event) => {
+        const route = event.route[0]; // Get the first route from the response
+        if (route) {
+          // Check if route data is available
+          if (map.getLayer("route")) {
+            // Remove existing layer if any
+            map.removeLayer("route");
+            map.removeSource("route");
+          }
+          map.addSource("route", {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: route.geometry, // Use route geometry
+            },
+          });
+          map.addLayer({
+            id: "route",
+            type: "line",
+            source: "route", // Your source ID
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+              "line-color": "#3887be", // Route color
+              "line-width": "1px", // Adjust width
+              "line-opacity": 0.75, // Optional: adjust opacity
+            },
+          });
+        }
+      });
+      map.flyTo({ center: [centerLng, centerLat], zoom: zoom });
       console.log(`zoom level: ${zoom}`);
     }
   };
@@ -273,9 +308,13 @@ function RideRequestForm() {
       }
       const zoom = Math.floor(Math.log2(40075 / distance)) + 1;
       console.log(`Required zoom level: ${zoom}`);
-      const price = 1000 + ((distance / 1000 - 2) / 0.5) * 500;
+      const price = (1000 + ((distance / 1000 - 2) / 0.5) * 500).toFixed(0);
       console.log(`${price} shs`);
       setCost(price);
+      const midLat = (userLat + location.location.lat) / 2;
+      const midLng = (userLng + location.location.lng) / 2;
+      setCenterLat(midLat);
+      setCenterLng(midLng);
     }
   }, [location]);
   return (
