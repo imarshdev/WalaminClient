@@ -84,7 +84,7 @@ button {
   transition: border-color 0.25s;
   color: #fff;
   background-color: #fff;
-  box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.3);
+  box-shadow: 1px 1px 10px #cccccc;
 }
 button:focus,
 button:focus-visible {
