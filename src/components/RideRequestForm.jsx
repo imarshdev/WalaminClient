@@ -14,6 +14,7 @@ const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
   const [inputValue, setInputValue] = useState("");
   const [filteredLocations, setFilteredLocations] = useState([]);
+  const [loactionItem, setLocationItem] = useState();
   useEffect(() => {
     if (inputValue) {
       const results = locationsData.filter((location) =>
@@ -27,6 +28,11 @@ function RideRequestForm() {
   const handleSelect = (location) => {
     setInputValue(location.name);
     setLocation(location);
+    if (!loactionItem) {
+      setLocationItem(location);
+    } else {
+      console.log("item already exists");
+    }
     console.log(location.name);
     setFilteredLocations([]);
   };
@@ -134,34 +140,44 @@ function RideRequestForm() {
       directions.setOrigin([userLng, userLat]);
       directions.setDestination([location.location.lng, location.location.lat]);
       directions.on("route", (event) => {
-        const route = event.route[0]; // Get the first route from the response
+        const route = event.route[0]; // Get the first route
         if (route) {
-          // Check if route data is available
+          console.log("route available");
+          
+          // Ensure the geometry is a valid GeoJSON LineString
+          const geoJsonData = {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: route.geometry.coordinates, // Make sure this exists
+            },
+          };
+          
+          // Check if the 'route' layer already exists
           if (map.getLayer("route")) {
-            // Remove existing layer if any
             map.removeLayer("route");
             map.removeSource("route");
           }
+          
+          // Add the new source and layer
           map.addSource("route", {
             type: "geojson",
-            data: {
-              type: "Feature",
-              properties: {},
-              geometry: route.geometry, // Use route geometry
-            },
+            data: geoJsonData, // Use the constructed GeoJSON data
           });
+      
           map.addLayer({
             id: "route",
             type: "line",
-            source: "route", // Your source ID
+            source: "route",
             layout: {
               "line-join": "round",
               "line-cap": "round",
             },
             paint: {
-              "line-color": "#3887be", // Route color
-              "line-width": "1px", // Adjust width
-              "line-opacity": 0.75, // Optional: adjust opacity
+              "line-color": "pink",
+              "line-width": 2, // You can adjust the width
+              "line-opacity": 0.75,
             },
           });
         }
@@ -367,11 +383,17 @@ function RideRequestForm() {
                     key={index}
                     onPress={() => handleSelect(location)}
                   >
-                    <MdLocationOn size={20} style={{ marginRight: "15px" }} />
+                    <MdLocationOn
+                      color="green"
+                      size={20}
+                      style={{ marginRight: "15px" }}
+                    />
                     <span>
                       {truncateText(location.name, 30)}
                       <br />
-                      {truncateText(location.address, 30)}
+                      <span style={{ fontSize: "12px" }}>
+                        {truncateText(location.address, 30)}
+                      </span>
                     </span>
                   </TouchableOpacity>
                 ))}
@@ -387,15 +409,19 @@ function RideRequestForm() {
                 size={20}
                 style={{ marginRight: "15px" }}
               />
-              <span>formatted Address</span>
-            </TouchableOpacity>
-            <TouchableOpacity id="location-item">
-              <MdLocationOn
-                color="limegreen"
-                size={20}
-                style={{ marginRight: "15px" }}
-              />
-              <span>formatted Address</span>
+              {loactionItem ? (
+                <>
+                  <span>
+                    {truncateText(loactionItem.name, 30)}
+                    <br />
+                    <span style={{ fontSize: "12px" }}>
+                      {truncateText(loactionItem.address, 30)}
+                    </span>
+                  </span>
+                </>
+              ) : (
+                <span>formatted Address</span>
+              )}
             </TouchableOpacity>
             <br />
             <p></p>

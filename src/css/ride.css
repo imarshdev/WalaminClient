@@ -35,10 +35,8 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0 10px;
-  height: 3rem;
   outline: solid 0.1px rgba(0, 100, 0, 0.26);
   background-color: #eff2fb;
-  margin-bottom: 15px;
 }
 .location-input:focus {
   outline: solid 0.1px rgb(0, 100, 0);
@@ -53,7 +51,7 @@
 }
 #location-item {
   width: 100%;
-  height: 4.5rem;
+  height: 3.5rem;
   border-bottom: solid 0.5px #eff2fb;
   margin-bottom: 10px;
   border-radius: 10px;

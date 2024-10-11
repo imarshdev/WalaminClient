@@ -3,6 +3,7 @@ import { TouchableOpacity } from "react-native-web";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/home.css";
 import dine from "../assets/dine.svg";
+import femaleRide from "../assets/f-ride.jpg";
 import shopping from "../assets/shopping.svg";
 import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
@@ -175,12 +176,23 @@ function Home() {
           </button>
 
           {/* button to all services page */}
-          <button id="service_item" style={{ width: "65%" }}>
-            <Link id="link_item" to="/ride-request">
-              <GiFullMotorcycleHelmet size={34} color="pink" />
-              <p style={{ fontSize: 14, margin: "1rem 0" }}>
-                All female ride 🤩
-              </p>
+          <button
+            id="service_item"
+            style={{
+              width: "65%",
+              padding: "0px",
+              overflow: "hidden",
+            }}
+          >
+            <Link
+              id="link_item"
+              to="/ride-request"
+              style={{ justifyContent: "space-between", display: "flex", flexDirection: "row" }}
+            >
+              <img src={femaleRide} style={{ height: "100%" }} />
+              <span style={{flexGrow: 1}}>
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>All new<br /> femaleRide <br /><br /> 😎</h2>
+              </span>
             </Link>
           </button>
 
@@ -188,7 +200,7 @@ function Home() {
           <button id="service_item" style={{ width: "30%" }}>
             <Link id="link_item" to="/driver-rides">
               <FaServicestack size={34} color="limegreen" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Captain's</h2>{" "}
+              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Captain's</h2>
             </Link>
           </button>
         </div>
