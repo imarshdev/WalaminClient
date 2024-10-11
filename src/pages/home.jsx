@@ -187,11 +187,19 @@ function Home() {
             <Link
               id="link_item"
               to="/ride-request"
-              style={{ justifyContent: "space-between", display: "flex", flexDirection: "row" }}
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                flexDirection: "row",
+              }}
             >
               <img src={femaleRide} style={{ height: "100%" }} />
-              <span style={{flexGrow: 1}}>
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>All new<br /> femaleRide <br /><br /> 😎</h2>
+              <span style={{ flexGrow: 1 }}>
+                <h2 style={{ fontSize: 16, margin: "1rem 0" }}>
+                  All new
+                  <br /> femaleRide <br />
+                  <br /> 🤩
+                </h2>
               </span>
             </Link>
           </button>
