@@ -9,7 +9,11 @@ const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
   const { userData } = useContext(UserContext);
-  const [userName] = useState(userData.firstName);
+  const userName = userData.firstName;
+  const lastName = userData.lastName;
+  const brand = userData.vehicleBrand;
+  const plate = userData.plateNumber;
+  const color = userData.vehicleColor;
   const [rideAccepted, setRideAccepted] = useState(false);
   const [rideStarted, setRideStarted] = useState(false);
   const [cards, setCards] = useState([]);
@@ -17,19 +21,33 @@ function DriverRideList() {
   const [activeRide, setActiveRide] = useState(null); // To store the active ride details
 
   useEffect(() => {
+    // Fetch pending rides when the component mounts
+    socket.on("pendingRides", (data) => {
+      console.log("Pending rides received", data);
+      setCards(data); // Set cards to the fetched rides
+    });
+
+    // Listen for new rides emitted from the server
     socket.on("recieveCard", (data) => {
-      console.log("data received", data);
+      console.log("New ride data received", data);
       setCards((prevCards) => [...prevCards, data]);
     });
 
     return () => {
+      socket.off("pendingRides");
       socket.off("recieveCard");
     };
   }, []);
 
   const sendReaction = (card) => {
     console.log("sending reaction");
-    const reactorName = userName;
+    const reactorName = {
+      userName,
+      lastName,
+      brand,
+      plate,
+      color,
+    };
     socket.emit("reaction", { cardSender: card.senderId, reactorName });
 
     // When a ride is accepted, store the ride data and open the ride-accepted section

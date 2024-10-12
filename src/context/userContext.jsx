@@ -8,7 +8,7 @@ const UserProvider = ({ children }) => {
     firstName: "",
     lastName: "",
     isLoggedIn: false,
-    vehicleBrand: "Bajaj",
+    vehicleBrand: "",
     plateNumber: "",
     vehicleColor: "",
     isRider: false,

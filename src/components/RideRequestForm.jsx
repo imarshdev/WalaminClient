@@ -143,7 +143,7 @@ function RideRequestForm() {
         const route = event.route[0]; // Get the first route
         if (route) {
           console.log("route available");
-          
+
           // Ensure the geometry is a valid GeoJSON LineString
           const geoJsonData = {
             type: "Feature",
@@ -153,19 +153,19 @@ function RideRequestForm() {
               coordinates: route.geometry.coordinates, // Make sure this exists
             },
           };
-          
+
           // Check if the 'route' layer already exists
           if (map.getLayer("route")) {
             map.removeLayer("route");
             map.removeSource("route");
           }
-          
+
           // Add the new source and layer
           map.addSource("route", {
             type: "geojson",
             data: geoJsonData, // Use the constructed GeoJSON data
           });
-      
+
           map.addLayer({
             id: "route",
             type: "line",
@@ -485,12 +485,16 @@ function RideRequestForm() {
       <BottomSheet blocking={false} open={resultSheet}>
         {result ? (
           <div className="result">
-            <p>Your captain {notification} is on his way</p>
+            <p>Your captain {notification.userName} is on his way</p>
             <div className="rider-image"></div>
             <div className="driver-details">
-              <p>Name: {notification}</p>
-              <p>Bajaj 120, lemon green</p>
-              <p>UFU171C</p>
+              <p>
+                Name: {notification.userName} {notification.lastName}
+              </p>
+              <p>
+                {notification.brand}, {notification.color}
+              </p>
+              <p>{notification.plate}</p>
             </div>
             <br />
             <br />
