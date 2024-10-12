@@ -48,7 +48,7 @@ function RideRequestForm() {
   const [userLng, setUserLng] = useState();
   useEffect(() => {
     socket.on("notifyReaction", ({ message }) => {
-      console.log("result received");
+      console.log("result received", message);
       setCostSheetOpen(false);
       setResultSheet(true);
       setNotification(message);
