@@ -284,6 +284,7 @@ export function Navigator() {
 export const NewRideNot = () => {
   const { userData, setUserData } = useContext(UserContext);
   const [newRide, setNewRide] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     console.log(`is Rider? ${userData.isRider}`);
     console.log(`rider vehicleBrand? ${userData.vehicleBrand}`);
@@ -301,7 +302,10 @@ export const NewRideNot = () => {
   return (
     <>
       {userData.isRider ? (
-        <TouchableOpacity id="notification">
+        <TouchableOpacity
+          id="notification"
+          onPress={() => navigate("/driver-rides")}
+        >
           <span style={{ color: "green" }}>{newRide ? "1 new ride" : "!"}</span>
         </TouchableOpacity>
       ) : (

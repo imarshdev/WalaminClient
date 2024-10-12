@@ -335,6 +335,10 @@ function RideRequestForm() {
       setCenterLng(midLng);
     }
   }, [location]);
+  const done = () => {
+    setVisible(false);
+    window.location.reload();
+  };
   return (
     <div
       className="container2"
@@ -347,10 +351,20 @@ function RideRequestForm() {
           setVisible(false);
         }}
       >
-        <div style={{ width: "100%", height: "100vh" }}>
+        <div
+          style={{
+            width: "100%",
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff",
+          }}
+        >
           <h1>Price to pay</h1>
           <span>ugx, {cost} shs.</span>
-          <button onClick={() => setVisible(false)}>
+          <button onClick={done}>
             <p>Collected</p>
           </button>
         </div>

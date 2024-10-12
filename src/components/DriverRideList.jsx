@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import { Dialog } from "primereact/dialog";
 import { UserContext } from "../context/userContext";
 import { MdLocationOn, MdTripOrigin } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const socket = io("https://walaminserver.onrender.com");
 
@@ -254,11 +255,26 @@ function RideMap({ userLat, userLng }) {
 export default DriverRideList;
 
 const PricePage = ({ activeRide, setVisible }) => {
+  const navigate = useNavigate();
+  const done = () => {
+    setVisible(false);
+    navigate("/");
+  };
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fff",
+      }}
+    >
       <h1>Price to collect</h1>
       <span>ugx, {activeRide.cost} shs</span>
-      <button onClick={() => setVisible(false)}>
+      <button style={{ width: "80%" }} onClick={done}>
         <p>Collected</p>
       </button>
     </div>
