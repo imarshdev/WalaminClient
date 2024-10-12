@@ -16,6 +16,7 @@ import { RiderContext } from "../context/riderContext";
 const socket = io("https://walaminserver.onrender.com");
 
 function Home() {
+  const linkToShare = "https://walamin-client.onrender.com";
   const { userData, setUserData } = useContext(UserContext);
   const [greeting, setGreeting] = useState();
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
@@ -68,6 +69,21 @@ function Home() {
     dateOptions
   );
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Walamin Green Solutions LTD",
+          text: "Check out the best ride app in UG!",
+          url: linkToShare,
+        })
+        .then(() => console.log("Shared successfully"))
+        .catch((error) => console.error("Error sharing:", error));
+    } else {
+      console.log("Web Share API not supported");
+    }
+  };
+
   return (
     <div className="container">
       <div className="topper">
@@ -106,7 +122,7 @@ function Home() {
                 Get a free ride by referring
               </span>
             </div>
-            <TouchableOpacity id="refer-button">
+            <TouchableOpacity onPress={handleShare} id="refer-button">
               <span style={{ fontSize: 14, color: "#fff" }}>
                 Refer a Friend
               </span>
