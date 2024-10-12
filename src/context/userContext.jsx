@@ -8,6 +8,10 @@ const UserProvider = ({ children }) => {
     firstName: "",
     lastName: "",
     isLoggedIn: false,
+    vehicleBrand: "Bajaj",
+    plateNumber: "",
+    vehicleColor: "",
+    isRider: false,
   });
 
   useEffect(() => {

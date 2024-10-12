@@ -54,6 +54,10 @@ function Signin() {
         lastName: LastName,
         contact: contact,
         isLoggedIn: true,
+        vehicleBrand: "Bajaj",
+        plateNumber: "",
+        vehicleColor: "",
+        isRider: false,
       });
       setLoading(true);
       setError("");

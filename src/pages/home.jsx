@@ -10,6 +10,7 @@ import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { MdSchedule, MdSell } from "react-icons/md";
 import { UserContext } from "../context/userContext";
+import { RiderContext } from "../context/riderContext";
 
 function Home() {
   const { userData, setUserData } = useContext(UserContext);
@@ -179,11 +180,18 @@ function Home() {
           <button
             id="service_item"
             style={{
-              width: "65%",
+              width: "100%",
               padding: "0px",
               overflow: "hidden",
+              height: "7.5rem",
+              backgroundColor: "pink",
+              position: "relative",
+              overflowY: "initial",
             }}
           >
+            <div id="tag">
+              <p style={{ color: "darkgreen" }}>All New</p>
+            </div>
             <Link
               id="link_item"
               to="/ride-request"
@@ -195,20 +203,11 @@ function Home() {
             >
               <img src={femaleRide} style={{ height: "100%" }} />
               <span style={{ flexGrow: 1 }}>
-                <h2 style={{ fontSize: 16, margin: "1rem 0" }}>
-                  All new
-                  <br /> femaleRide <br />
-                  <br /> 🤩
-                </h2>
+                <br />
+                <br />
+                Rides by Women <br />
+                for women
               </span>
-            </Link>
-          </button>
-
-          {/* button to all services page */}
-          <button id="service_item" style={{ width: "30%" }}>
-            <Link id="link_item" to="/driver-rides">
-              <FaServicestack size={34} color="limegreen" />
-              <h2 style={{ fontSize: 16, margin: "1rem 0" }}>Captain's</h2>
             </Link>
           </button>
         </div>
@@ -258,6 +257,26 @@ export function Navigator() {
           </span>
         </Link>
       </TouchableOpacity>
+      <NewRideNot />
     </div>
   );
 }
+
+export const NewRideNot = () => {
+  const { userData, setUserData } = useContext(UserContext);
+  useEffect(() => {
+    console.log(`is Rider? ${userData.isRider}`);
+    console.log(`rider vehicleBrand? ${userData.vehicleBrand}`);
+  }, [userData]);
+  return (
+    <>
+      {userData.isRider ? (
+        <TouchableOpacity id="notification">
+          <span style={{ color: "green" }}>{"!"}</span>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};

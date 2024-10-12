@@ -19,6 +19,7 @@ import { TiTicket } from "react-icons/ti";
 import { GiFullMotorcycleHelmet, GiHouse, GiMedicalPack } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { FaSuitcase } from "react-icons/fa";
+import { NewRideNot } from "./home";
 
 function AllServices() {
   return (
@@ -289,6 +290,7 @@ export function Navigator() {
           </span>
         </Link>
       </TouchableOpacity>
+      <NewRideNot />
     </div>
   );
 }

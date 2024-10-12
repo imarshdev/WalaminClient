@@ -16,6 +16,7 @@ import Signin from "./pages/signin.jsx";
 import RideRequestForm from "./components/RideRequestForm.jsx";
 import DriverRideList from "./components/DriverRideList.jsx";
 import ScheduleRide from "./components/schedule.jsx";
+import RiderSignUp from "./pages/riderSignUp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
   {
     path: "/schedule-ride",
     element: <ScheduleRide />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/riderSignUp",
+    element: <RiderSignUp />,
     errorElement: <ErrorPage />,
   },
 ]);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../css/account.css";
 import { TouchableOpacity } from "react-native-web";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,9 +11,11 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { MdOutlineQuestionAnswer, MdChangeHistory } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
+import { NewRideNot } from "./home";
 
 function Account() {
   const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
   const cancelled = () => {
     setVisible(false);
   };
@@ -60,26 +62,28 @@ function Account() {
         <p style={{ width: "100%", textAlign: "start" }}>Your account</p>
         <TouchableOpacity id="account-option">
           <span>
-            <SlCalender style={{marginRight: "1rem"}} />
+            <SlCalender style={{ marginRight: "1rem" }} />
             Scheduled rides
           </span>
         </TouchableOpacity>
         <TouchableOpacity id="account-option">
           <span>
-            <MdChangeHistory style={{marginRight: "1rem"}} />
+            <MdChangeHistory style={{ marginRight: "1rem" }} />
             Ride History
           </span>
         </TouchableOpacity>
         <p style={{ width: "100%", textAlign: "start" }}>Support</p>
         <TouchableOpacity id="account-option">
           <span>
-            <BiSupport style={{marginRight: "1rem"}} />
-            Contact Support</span>
+            <BiSupport style={{ marginRight: "1rem" }} />
+            Contact Support
+          </span>
         </TouchableOpacity>
-        <TouchableOpacity id="account-option">
+        <TouchableOpacity onPress={() => setVisible2(true)} id="account-option">
           <span>
-            <GiFullMotorcycleHelmet style={{marginRight: "1rem"}} />
-            Become a captain</span>
+            <GiFullMotorcycleHelmet style={{ marginRight: "1rem" }} />
+            Become a captain
+          </span>
         </TouchableOpacity>
         <p style={{ width: "100%", textAlign: "start" }}>Log Out</p>
         <TouchableOpacity
@@ -112,6 +116,24 @@ function Account() {
         </Dialog>
       </div>
       <Navigator />
+      <Dialog
+        visible={visible2}
+        style={{
+          width: "100%",
+          backgroundColor: "#fff",
+          padding: "30px 20px",
+          boxSizing: "border-box",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+        onHide={() => {
+          if (!visible2) return;
+          setVisible2(false);
+        }}
+      >
+        <CaptainReg setVisible2={setVisible2} />
+      </Dialog>
     </div>
   );
 }
@@ -152,6 +174,80 @@ export function Navigator() {
           </span>
         </Link>
       </TouchableOpacity>
+      <NewRideNot />
+    </div>
+  );
+}
+
+function CaptainReg({ setVisible2 }) {
+  const navigate = useNavigate()
+  const [code, setCode] = useState("");
+  const codeRef = useRef();
+  useEffect(() => {
+    if (!code) {
+      console.log("no code yet");
+    } else {
+      console.log(`typing ${code}`);
+      if (code.length === 10 && code === "1213142122") {
+        console.log("reached");
+        navigate("/riderSignUp")
+      } else {
+        console.log("almost there");
+      }
+    }
+  }, [code]);
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+  };
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <h1>Hello there</h1>
+      <label>
+        <p>Enter Captain's 10 digit code</p>
+        <div className="input-cover">
+          <input
+            ref={codeRef}
+            type="number"
+            value={code}
+            onChange={handleCodeChange}
+            autoFocus={true}
+            style={{
+              paddingLeft: "10px",
+            }}
+            placeholder="1234567890"
+          />
+        </div>
+      </label>
+      <>
+        <p>Don't have one? contact us for yours !!</p>
+      </>
+      <div
+        style={{
+          justifyContent: "space-between",
+          width: "100%",
+          display: "flex",
+        }}
+      >
+        <button
+          onClick={() => setVisible2(false)}
+          style={{ backgroundColor: "limegreen", width: "35%", height: "3rem" }}
+        >
+          <span>Close</span>
+        </button>
+        <button
+          style={{ backgroundColor: "limegreen", width: "60%", height: "3rem" }}
+        >
+          <span>Contact Us</span>
+        </button>
+      </div>
     </div>
   );
 }

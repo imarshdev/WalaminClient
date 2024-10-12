@@ -4,11 +4,10 @@ const RiderContext = createContext();
 
 const RiderProvider = ({ children }) => {
   const [riderData, setRiderData] = useState({
-    firstName: "",
-    lastName: "",
-    vehicleBrand: "",
+    vehicleBrand: "Bajaj",
     plateNumber: "",
     vehicleColor: "",
+    isRider: true,
   });
 
   useEffect(() => {
