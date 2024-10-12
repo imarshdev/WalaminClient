@@ -283,22 +283,31 @@ export function Navigator() {
 
 export const NewRideNot = () => {
   const { userData, setUserData } = useContext(UserContext);
+  const { riderData, setRiderData } = useContext(RiderContext);
   const [newRide, setNewRide] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(`is Rider? ${userData.isRider}`);
-    console.log(`rider vehicleBrand? ${userData.vehicleBrand}`);
-  }, [userData]);
-  useEffect(() => {
-    socket.on("recieveCard", (data) => {
-      console.log("data received", data);
-      setNewRide(true);
-    });
+    console.log("Rider data: ", riderData);
+  }, []);
 
+  useEffect(() => {
+    if (!socket.connected) {
+      socket.connect();
+    } else {
+      socket.disconnect();
+      console.log("Socket is reconnecting");
+      socket.connect();
+    }
+    socket.on("pendingRides", (data) => {
+      console.log("data received", data);
+      console.log("data received", data.length);
+      setRiderData(data.length);
+    });
     return () => {
-      socket.off("recieveCard");
+      socket.off("pendingRides");
     };
   }, []);
+
   return (
     <>
       {userData.isRider ? (
@@ -306,7 +315,7 @@ export const NewRideNot = () => {
           id="notification"
           onPress={() => navigate("/driver-rides")}
         >
-          <span style={{ color: "green" }}>{newRide ? "1 new ride" : "!"}</span>
+          <span style={{ color: "green" }}>{riderData}</span>
         </TouchableOpacity>
       ) : (
         <></>

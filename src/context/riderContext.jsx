@@ -1,14 +1,12 @@
 import React, { createContext, useEffect, useState } from "react";
 
-const RiderContext = createContext();
+const RiderContext = createContext({
+  riderData: { available: 0 },
+  setRiderData: () => {},
+});
 
 const RiderProvider = ({ children }) => {
-  const [riderData, setRiderData] = useState({
-    vehicleBrand: "Bajaj",
-    plateNumber: "",
-    vehicleColor: "",
-    isRider: true,
-  });
+  const [riderData, setRiderData] = useState({ available: 0 });
 
   useEffect(() => {
     const storedData = localStorage.getItem("riderData");

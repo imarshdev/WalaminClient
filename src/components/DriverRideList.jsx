@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
-import { Dialog } from "primereact/dialog";
+import { Sidebar } from "primereact/sidebar";
 import { UserContext } from "../context/userContext";
 import { MdLocationOn, MdTripOrigin } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
+  const location = useLocation();
   const [visible, setVisible] = useState(false);
   const { userData } = useContext(UserContext);
   const userName = userData.firstName;
@@ -24,23 +25,41 @@ function DriverRideList() {
   const [activeRide, setActiveRide] = useState(null); // To store the active ride details
 
   useEffect(() => {
-    // Fetch pending rides when the component mounts
+    console.log("Checking socket connection");
+
+    if (!socket) return;
+
+    if (!socket.connected) {
+      console.log("Socket is not connected, forcing reconnect...");
+      socket.connect();
+    } else {
+      console.log("Socket is already connected");
+      socket.disconnect();
+      console.log("Socket is reconnecting");
+      socket.connect();
+    }
+
+    // Add listeners for pending rides and new rides
     socket.on("pendingRides", (data) => {
       console.log("Pending rides received", data);
-      setCards(data); // Set cards to the fetched rides
+      setCards(data);
     });
 
-    // Listen for new rides emitted from the server
     socket.on("recieveCard", (data) => {
       console.log("New ride data received", data);
       setCards((prevCards) => [...prevCards, data]);
-    });
+    }, []);
 
+    // Cleanup listeners on unmount
     return () => {
       socket.off("pendingRides");
       socket.off("recieveCard");
     };
-  }, []);
+  }, [socket]);
+
+  useEffect(() => {
+    console.log("hello there");
+  });
 
   const sendReaction = (card) => {
     console.log("sending reaction");
@@ -70,8 +89,9 @@ function DriverRideList() {
   };
 
   return (
-    <div className="rider-container">
-      <Dialog
+    <div className="rider-container" key={location.pathname}>
+      <Sidebar
+        fullScreen
         visible={visible}
         onHide={() => {
           if (!visible) return;
@@ -79,7 +99,7 @@ function DriverRideList() {
         }}
       >
         <PricePage activeRide={activeRide} setVisible={setVisible} />
-      </Dialog>
+      </Sidebar>
       <h2>Available Rides</h2>
       <br />
       <div style={{ width: "100%", height: "100%" }}>
@@ -264,7 +284,7 @@ const PricePage = ({ activeRide, setVisible }) => {
     <div
       style={{
         width: "100%",
-        height: "100vh",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -272,8 +292,12 @@ const PricePage = ({ activeRide, setVisible }) => {
         backgroundColor: "#fff",
       }}
     >
-      <h1>Price to collect</h1>
+      <h2>Price to collect</h2>
+      <br />
+      <br />
       <span>ugx, {activeRide.cost} shs</span>
+      <br />
+      <br />
       <button style={{ width: "80%" }} onClick={done}>
         <p>Collected</p>
       </button>

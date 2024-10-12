@@ -192,6 +192,9 @@ textarea {
   border: solid .5px green;
 }
 
+.p-sidebar-header{
+  display: none;
+}
 button:focus {
   outline: none;
 }

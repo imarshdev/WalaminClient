@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
-import { Dialog } from "primereact/dialog";
+import { Sidebar } from "primereact/sidebar";
 import "react-spring-bottom-sheet/dist/style.css";
 import locationsData from "../locations/filteredLocations.json";
 import { BottomSheet } from "react-spring-bottom-sheet";
@@ -344,7 +344,9 @@ function RideRequestForm() {
       className="container2"
       style={{ boxSizing: "border-box", padding: "0px" }}
     >
-      <Dialog
+      <Sidebar
+        fullScreen
+        style={{ width: "100%", height: "100vh" }}
         visible={visible}
         onHide={() => {
           if (!visible) return;
@@ -354,7 +356,7 @@ function RideRequestForm() {
         <div
           style={{
             width: "100%",
-            height: "100vh",
+            height: "100%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -368,7 +370,7 @@ function RideRequestForm() {
             <p>Collected</p>
           </button>
         </div>
-      </Dialog>
+      </Sidebar>
       <div id="top-shadow"></div>
       <div
         id="map"
@@ -559,7 +561,9 @@ function RideRequestForm() {
           )}
           <div className="driver-details">
             <p>Name: {notification.userName}</p>
-            <p>{notification.brand}, {notification.color}</p>
+            <p>
+              {notification.brand}, {notification.color}
+            </p>
             <p>{notification.plate}</p>
           </div>
           <br />

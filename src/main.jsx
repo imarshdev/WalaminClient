@@ -8,7 +8,8 @@ import { RiderProvider } from "./context/riderContext.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserProvider>
     <RiderProvider>
-        <App />
+      <App />
     </RiderProvider>
   </UserProvider>
 );
+
