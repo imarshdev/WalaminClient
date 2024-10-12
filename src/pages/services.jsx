@@ -259,10 +259,14 @@ function AllServices() {
 export default AllServices;
 
 export function Navigator() {
+  const vibrate = () => {
+    console.log("vibrating");
+    navigator.vibrate(100);
+  };
   return (
     <div className="navigator">
       {/* home page */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={vibrate}>
         <Link to="/">
           <span className="icon_button">
             <FaHome color="#fff" size={24} />
@@ -272,7 +276,7 @@ export function Navigator() {
       </TouchableOpacity>
 
       {/* wallet page */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={vibrate}>
         <Link to="/services">
           <span className="icon_button">
             <FaServicestack color="#fff" size={24} />
@@ -282,7 +286,7 @@ export function Navigator() {
       </TouchableOpacity>
 
       {/* profile page */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={vibrate}>
         <Link to="/account">
           <span className="icon_button">
             <GiFullMotorcycleHelmet color="#fff" size={24} />
