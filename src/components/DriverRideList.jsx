@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "../css/driver.css";
 import io from "socket.io-client";
+import { Dialog } from "primereact/dialog";
 import { UserContext } from "../context/userContext";
 import { MdLocationOn, MdTripOrigin } from "react-icons/md";
 
 const socket = io("https://walaminserver.onrender.com");
 
 function DriverRideList() {
+  const [visible, setVisible] = useState(false);
   const { userData } = useContext(UserContext);
   const userName = userData.firstName;
   const lastName = userData.lastName;
@@ -68,6 +70,15 @@ function DriverRideList() {
 
   return (
     <div className="rider-container">
+      <Dialog
+        visible={visible}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
+      >
+        <PricePage activeRide={activeRide} setVisible={setVisible} />
+      </Dialog>
       <h2>Available Rides</h2>
       <br />
       <div style={{ width: "100%", height: "100%" }}>
@@ -144,6 +155,7 @@ function DriverRideList() {
                 setRideAccepted(false);
                 setRideStarted(false);
                 updateRideStatus("Ride Ended");
+                setVisible(true);
               }}
             >
               <span>End ride</span>
@@ -240,3 +252,15 @@ function RideMap({ userLat, userLng }) {
 }
 
 export default DriverRideList;
+
+const PricePage = ({ activeRide, setVisible }) => {
+  return (
+    <div style={{ width: "100%", height: "100vh" }}>
+      <h1>Price to collect</h1>
+      <span>ugx, {activeRide.cost} shs</span>
+      <button onClick={() => setVisible(false)}>
+        <p>Collected</p>
+      </button>
+    </div>
+  );
+};

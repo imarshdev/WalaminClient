@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import "../css/ride.css";
+import { Dialog } from "primereact/dialog";
 import "react-spring-bottom-sheet/dist/style.css";
 import locationsData from "../locations/filteredLocations.json";
 import { BottomSheet } from "react-spring-bottom-sheet";
@@ -46,6 +47,7 @@ function RideRequestForm() {
   const [shortUserlocation, setShortUserlocation] = useState();
   const [userLat, setUserLat] = useState();
   const [userLng, setUserLng] = useState();
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
     socket.on("notifyReaction", ({ message }) => {
       console.log("result received", message);
@@ -195,7 +197,7 @@ function RideRequestForm() {
   };
   useEffect(() => {
     if (rideStatus === "Ride Ended") {
-      window.location.reload();
+      setVisible(true);
     }
   }, [rideStatus]);
   const ordered = () => {
@@ -338,6 +340,21 @@ function RideRequestForm() {
       className="container2"
       style={{ boxSizing: "border-box", padding: "0px" }}
     >
+      <Dialog
+        visible={visible}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
+      >
+        <div style={{ width: "100%", height: "100vh" }}>
+          <h1>Price to pay</h1>
+          <span>ugx, {cost} shs.</span>
+          <button onClick={() => setVisible(false)}>
+            <p>Collected</p>
+          </button>
+        </div>
+      </Dialog>
       <div id="top-shadow"></div>
       <div
         id="map"
@@ -486,7 +503,6 @@ function RideRequestForm() {
         {result ? (
           <div className="result">
             <p>Your captain {notification.userName} is on his way</p>
-            <div className="rider-image"></div>
             <div className="driver-details">
               <p>
                 Name: {notification.userName} {notification.lastName}
