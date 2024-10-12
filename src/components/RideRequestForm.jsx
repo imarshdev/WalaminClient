@@ -551,16 +551,16 @@ function RideRequestForm() {
       >
         <div className="result" style={{ height: "auto" }}>
           {rideStatus === "Rider Arrived" ? (
-            <p>Your captain {notification} has arrived</p>
+            <p>Your captain {notification.userName} has arrived</p>
           ) : rideStatus === "Ride Started" ? (
             <p>Your ride has started</p>
           ) : (
             rideStatus === "Ride Ended" && <p>Your ride has ended</p>
           )}
           <div className="driver-details">
-            <p>Name: {notification}</p>
-            <p>Bajaj 120, lemon green</p>
-            <p>UFU171C</p>
+            <p>Name: {notification.userName}</p>
+            <p>{notification.brand}, {notification.color}</p>
+            <p>{notification.plate}</p>
           </div>
           <br />
           <br />
