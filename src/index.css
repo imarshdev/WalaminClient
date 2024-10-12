@@ -179,11 +179,11 @@ textarea {
 }
 
 #notification {
-  width: 4rem;
+  width: 6rem;
   height: 4rem;
   position: absolute;
   right: 0px;
-  top: -50px;
+  top: -55px;
   display: flex;
   justify-content: center;
   align-items: center;

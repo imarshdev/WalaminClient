@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-web";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/home.css";
+import io from "socket.io-client";
 import dine from "../assets/dine.svg";
 import femaleRide from "../assets/f-ride.jpg";
 import shopping from "../assets/shopping.svg";
@@ -11,6 +12,8 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { MdSchedule, MdSell } from "react-icons/md";
 import { UserContext } from "../context/userContext";
 import { RiderContext } from "../context/riderContext";
+
+const socket = io("https://walaminserver.onrender.com");
 
 function Home() {
   const { userData, setUserData } = useContext(UserContext);
@@ -183,7 +186,7 @@ function Home() {
               width: "100%",
               padding: "0px",
               overflow: "hidden",
-              height: "7.5rem",
+              height: "10rem",
               backgroundColor: "pink",
               position: "relative",
               overflowY: "initial",
@@ -264,15 +267,26 @@ export function Navigator() {
 
 export const NewRideNot = () => {
   const { userData, setUserData } = useContext(UserContext);
+  const [newRide, setNewRide] = useState(false);
   useEffect(() => {
     console.log(`is Rider? ${userData.isRider}`);
     console.log(`rider vehicleBrand? ${userData.vehicleBrand}`);
   }, [userData]);
+  useEffect(() => {
+    socket.on("recieveCard", (data) => {
+      console.log("data received", data);
+      setNewRide(true);
+    });
+
+    return () => {
+      socket.off("recieveCard");
+    };
+  }, []);
   return (
     <>
       {userData.isRider ? (
         <TouchableOpacity id="notification">
-          <span style={{ color: "green" }}>{"!"}</span>
+          <span style={{ color: "green" }}>{newRide ? "1 new ride" : "!"}</span>
         </TouchableOpacity>
       ) : (
         <></>
