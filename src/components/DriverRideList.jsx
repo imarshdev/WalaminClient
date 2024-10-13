@@ -45,10 +45,14 @@ function DriverRideList() {
       setCards(data);
     });
 
-    socket.on("recieveCard", (data) => {
-      console.log("New ride data received", data);
-      setCards((prevCards) => [...prevCards, data]);
-    }, []);
+    socket.on(
+      "recieveCard",
+      (data) => {
+        console.log("New ride data received", data);
+        setCards((prevCards) => [...prevCards, data]);
+      },
+      []
+    );
 
     // Cleanup listeners on unmount
     return () => {
@@ -119,7 +123,7 @@ function DriverRideList() {
         <div
           id="ongoing-map"
           ref={useRef()}
-          style={{ width: "100%", height: "55vh" }}
+          style={{ width: "100%", height: "65vh" }}
         >
           {activeRide && (
             <RideMap
@@ -129,21 +133,16 @@ function DriverRideList() {
           )}
         </div>
         <div id="ongoing-map-usage">
-          <p>Progress</p>
-          <span>2/4km and an approximated 3 mins to go!!</span>
-          <br />
-          <div id="progress-bar">
-            <div id="done"></div>
-          </div>
-          <br />
           <p>
-            <MdTripOrigin style={{ marginRight: "5px" }} /> from :{" "}
+            <MdTripOrigin style={{ marginRight: "20px" }} /> from : <br />
             {activeRide ? activeRide.shortUserlocation : "Unknown location"}
           </p>
           <p>
-            <MdLocationOn style={{ marginRight: "5px" }} />
-            to : {activeRide ? activeRide.location.name : "Unknown destination"}
+            <MdLocationOn style={{ marginRight: "20px" }} />
+            to : <br />
+            {activeRide ? activeRide.location.name : "Unknown destination"}
           </p>
+          <br />
           <div id="actions">
             {arrived ? (
               <>
@@ -266,7 +265,7 @@ function RideMap({ userLat, userLng }) {
   }, [userLat, userLng]);
 
   return (
-    <div style={{ height: "55vh", width: "100%" }}>
+    <div style={{ height: "65vh", width: "100%" }}>
       <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
     </div>
   );

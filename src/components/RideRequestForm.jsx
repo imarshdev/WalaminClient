@@ -15,7 +15,7 @@ const socket = io("https://walaminserver.onrender.com");
 function RideRequestForm() {
   const [inputValue, setInputValue] = useState("");
   const [filteredLocations, setFilteredLocations] = useState([]);
-  const [loactionItem, setLocationItem] = useState();
+  const [locationItem, setLocationItem] = useState();
   useEffect(() => {
     if (inputValue) {
       const results = locationsData.filter((location) =>
@@ -29,7 +29,7 @@ function RideRequestForm() {
   const handleSelect = (location) => {
     setInputValue(location.name);
     setLocation(location);
-    if (!loactionItem) {
+    if (!locationItem) {
       setLocationItem(location);
     } else {
       console.log("item already exists");
@@ -442,13 +442,13 @@ function RideRequestForm() {
                 size={20}
                 style={{ marginRight: "15px" }}
               />
-              {loactionItem ? (
+              {locationItem ? (
                 <>
                   <span>
-                    {truncateText(loactionItem.name, 30)}
+                    {truncateText(locationItem.name, 30)}
                     <br />
                     <span style={{ fontSize: "12px" }}>
-                      {truncateText(loactionItem.address, 30)}
+                      {truncateText(locationItem.address, 30)}
                     </span>
                   </span>
                 </>

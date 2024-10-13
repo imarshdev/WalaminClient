@@ -17,6 +17,7 @@ import RideRequestForm from "./components/RideRequestForm.jsx";
 import DriverRideList from "./components/DriverRideList.jsx";
 import ScheduleRide from "./components/schedule.jsx";
 import RiderSignUp from "./pages/riderSignUp.jsx";
+import RideRequest from "./components/rideRequest.jsx";
 
 const router = createBrowserRouter([
   {
@@ -59,9 +60,13 @@ const router = createBrowserRouter([
     element: <RiderSignUp />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/riderequest",
+    element: <RideRequest />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 function App() {
-
   return (
     <>
       <RouterProvider router={router} />

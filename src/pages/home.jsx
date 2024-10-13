@@ -147,7 +147,7 @@ function Home() {
           </h2>
           {/* delivery button */}
           <button id="service_item">
-            <Link id="link_item" to="/ride-request">
+            <Link id="link_item" to="/riderequest">
               <CiDeliveryTruck size={34} color="#ffc107" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Delivery</p>
             </Link>
