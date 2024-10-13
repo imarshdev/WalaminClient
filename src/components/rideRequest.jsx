@@ -7,7 +7,7 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import locationsData from "../locations/filteredLocations.json";
-import { MdCircle, MdLocationOn } from "react-icons/md";
+import { MdCircle, MdLocationOn, MdTripOrigin } from "react-icons/md";
 import { TouchableOpacity } from "react-native-web";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import { FaArrowRight } from "react-icons/fa";
@@ -330,7 +330,7 @@ function MapElement({ lat1, lng1, selectedLocation }) {
           [lng1, lat1], // User's location
           [lng, lat], // Selected location
         ],
-        { padding: 50 }
+        { padding: 100 }
       );
     }
     // Clean up on unmount
@@ -349,18 +349,14 @@ function MapElement({ lat1, lng1, selectedLocation }) {
 function OriginMarker() {
   return (
     <div className="start">
-      <span style={{ color: "white", fontWeight: "bolder", fontSize: "18px" }}>
-        Start
-      </span>
+      <MdTripOrigin size={24} color="#fff"/>
     </div>
   );
 }
 function DestinationMarker() {
   return (
     <div className="stop">
-      <span style={{ color: "white", fontWeight: "bolder", fontSize: "18px" }}>
-        Stop
-      </span>
+      <MdLocationOn size={24} color="#fff"/>
     </div>
   );
 }

@@ -202,13 +202,14 @@ textarea {
 
 .start {
   /* Modify size here: */
-  --size: 5rem;
+  --size: 3rem;
 
   position: relative;
   width: var(--size);
-  height: calc(var(--size) * 0.66);
+  height: var(--size);
   background: lightgreen;
-  border-radius: 10px;
+  border: solid .5px #ffebee;
+  border-radius: 50%;
 
   display: flex;
   justify-content: center;
@@ -217,13 +218,14 @@ textarea {
 
 .stop {
   /* Modify size here: */
-  --size: 5rem;
+  --size: 3rem;
 
   position: relative;
   width: var(--size);
-  height: calc(var(--size) * 0.66);
+  height: var(--size);
   background: orange;
-  border-radius: 10px;
+  border: solid .5px lightgreen;
+  border-radius: 50%;
 
   display: flex;
   justify-content: center;
