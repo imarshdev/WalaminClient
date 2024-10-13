@@ -9,7 +9,7 @@ import shopping from "../assets/shopping.svg";
 import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
-import { MdSchedule, MdSell } from "react-icons/md";
+import { MdSchedule, MdSell,  } from "react-icons/md";
 import { UserContext } from "../context/userContext";
 import { RiderContext } from "../context/riderContext";
 
@@ -229,9 +229,6 @@ function Home() {
               </span>
             </Link>
           </button>
-        </div>
-        <div className="mid_details_lower">
-          <div className="image"></div>
         </div>
       </div>
 

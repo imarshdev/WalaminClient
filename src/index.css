@@ -192,9 +192,71 @@ textarea {
   border: solid .5px green;
 }
 
-.p-sidebar-header{
+.p-sidebar-header {
   display: none;
 }
+
+.mapbox-directions-component-keyline {
+  display: none;
+}
+
+.start {
+  /* Modify size here: */
+  --size: 5rem;
+
+  position: relative;
+  width: var(--size);
+  height: calc(var(--size) * 0.66);
+  background: lightgreen;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stop {
+  /* Modify size here: */
+  --size: 5rem;
+
+  position: relative;
+  width: var(--size);
+  height: calc(var(--size) * 0.66);
+  background: orange;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stop:after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: calc(var(--size) * 0.13) solid transparent;
+  border-top-color: #333;
+  border-bottom: 0;
+  margin-left: calc(var(--size) * 0.13 * -1);
+  margin-bottom: calc(var(--size) * 0.13 * -1);  
+}
+.start:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: calc(var(--size) * 0.13) solid transparent;
+  border-top-color: #333;
+  border-bottom: 0;
+  margin-left: calc(var(--size) * 0.13 * -1);
+  margin-bottom: calc(var(--size) * 0.13 * -1);
+}
+
 button:focus {
   outline: none;
 }

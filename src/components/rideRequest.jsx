@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
+import scooter from "../assets/scooter.jpg";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 // Ensure you import the necessary CSS for Mapbox GL and Directions
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -19,6 +21,7 @@ export default function RideRequest() {
   const [userLng, setUserLng] = useState();
   const [shortUserlocation, setShortUserlocation] = useState();
   const [userLocation, setUserLocation] = useState();
+  const [open, setOpen] = useState(true);
 
   const [selectedLocation, setSelectedLocation] = useState();
   useEffect(() => {
@@ -62,10 +65,51 @@ export default function RideRequest() {
         shortUserlocation={shortUserlocation}
         onLocationSelect={setSelectedLocation}
       />
+      <BottomSheet open={open} blocking={false} skipInitialTransition={true}>
+        <ConfirmDialog />
+      </BottomSheet>
     </div>
   );
 }
 
+function ConfirmDialog() {
+  return (
+    <div
+      style={{
+        height: "43vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <div>
+        <p>Confirm Ride</p>
+        <p>
+          Boda: USh <span style={{ fontSize: "24px" }}>5,400</span>{" "}
+          <span style={{ color: "lightgray" }}>{"cash only"}</span>
+        </p>
+        <img src={scooter} style={{ width: "10rem" }} />
+      </div>
+      <div>
+        <TouchableOpacity
+          style={{
+            width: "100%",
+            height: "4rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "limegreen",
+            marginbottom: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <p style={{ color: "#fff" }}>Confirm Location</p>
+        </TouchableOpacity>
+        <br />
+      </div>
+    </div>
+  );
+}
 function ApiCalls() {
   useEffect(() => {});
   return;
@@ -127,7 +171,7 @@ function SearchThing({ shortUserlocation, onLocationSelect }) {
           alignItems: "start",
           display: "flex",
           flexDirection: "column",
-          height: "90vh",
+          height: "95vh",
         }}
       >
         <div>
@@ -216,11 +260,14 @@ function MapElement({ lat1, lng1, selectedLocation }) {
       zoom: 15, // Starting zoom level
       attributionControl: false,
     });
-    const marker = new mapboxgl.Marker().setLngLat({
-      lng: lng1,
-      lat: lat1,
-    });
-    marker.addTo(map);
+    const startMarker = document.createElement("div");
+    ReactDOM.render(<OriginMarker />, startMarker);
+    new mapboxgl.Marker(startMarker)
+      .setLngLat({
+        lng: lng1,
+        lat: lat1,
+      })
+      .addTo(map);
 
     // Initialize the Mapbox Directions plugin
     const directions = new MapboxDirections({
@@ -241,6 +288,8 @@ function MapElement({ lat1, lng1, selectedLocation }) {
         id: "route",
         type: "line",
         source: "directions",
+        alternatives: false,
+        profile: "mapbox/driving-traffic",
         layout: {
           "line-join": "round",
           "line-cap": "round",
@@ -262,6 +311,15 @@ function MapElement({ lat1, lng1, selectedLocation }) {
       const lat = selectedLocation.location.lat;
       const lng = selectedLocation.location.lng;
 
+      const stopMarker = document.createElement("div");
+      ReactDOM.render(<DestinationMarker />, stopMarker);
+      new mapboxgl.Marker(stopMarker)
+        .setLngLat({
+          lng: lng,
+          lat: lat,
+        })
+        .addTo(map);
+
       // Set the origin to user's location and destination to the selected location
       directions.setOrigin([lng1, lat1]); // User's current location
       directions.setDestination([lng, lat]); // Selected location
@@ -280,10 +338,29 @@ function MapElement({ lat1, lng1, selectedLocation }) {
   }, [lat1, lng1, selectedLocation]);
   return (
     <>
-      <div id="map" ref={mapContainerRef} style={{ height: "100vh" }}></div>
-      <div style={{ height: "0", width: "100%" }}>
+      <div id="map" ref={mapContainerRef} style={{ height: "60vh" }}></div>
+      <div style={{ height: "50vh", width: "100%" }}>
         <div id="top-shadow"></div>
       </div>
     </>
+  );
+}
+
+function OriginMarker() {
+  return (
+    <div className="start">
+      <span style={{ color: "white", fontWeight: "bolder", fontSize: "18px" }}>
+        Start
+      </span>
+    </div>
+  );
+}
+function DestinationMarker() {
+  return (
+    <div className="stop">
+      <span style={{ color: "white", fontWeight: "bolder", fontSize: "18px" }}>
+        Stop
+      </span>
+    </div>
   );
 }
