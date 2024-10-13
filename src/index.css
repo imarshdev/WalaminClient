@@ -196,10 +196,6 @@ textarea {
   display: none;
 }
 
-.mapbox-directions-component-keyline {
-  display: none;
-}
-
 .start {
   /* Modify size here: */
   --size: 3rem;

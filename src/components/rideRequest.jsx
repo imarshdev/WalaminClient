@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import scooter from "../assets/scooter.jpg";
+import { createRoot } from "react-dom/client";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 // Ensure you import the necessary CSS for Mapbox GL and Directions
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -22,8 +23,10 @@ export default function RideRequest() {
   const [shortUserlocation, setShortUserlocation] = useState();
   const [userLocation, setUserLocation] = useState();
   const [open, setOpen] = useState(true);
-
+  const [confirmed, setConfirmed] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState();
+  const [distance, setDistance] = useState();
+  const [cost, setCost] = useState();
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
@@ -59,6 +62,9 @@ export default function RideRequest() {
           lat1={userLat}
           lng1={userLng}
           selectedLocation={selectedLocation}
+          confirmed={confirmed}
+          setDistance={setDistance}
+          setCost={setCost}
         />
       )}
       <SearchThing
@@ -66,13 +72,27 @@ export default function RideRequest() {
         onLocationSelect={setSelectedLocation}
       />
       <BottomSheet open={open} blocking={false} skipInitialTransition={true}>
-        <ConfirmDialog />
+        <ConfirmDialog
+          shortUserlocation={shortUserlocation}
+          setConfirmed={setConfirmed}
+          confirmed={confirmed}
+          selectedLocation={selectedLocation}
+          distance={distance}
+          cost={cost}
+        />
       </BottomSheet>
     </div>
   );
 }
 
-function ConfirmDialog() {
+function ConfirmDialog({
+  selectedLocation,
+  shortUserlocation,
+  setConfirmed,
+  confirmed,
+  distance,
+  cost,
+}) {
   return (
     <div
       style={{
@@ -82,29 +102,65 @@ function ConfirmDialog() {
         justifyContent: "space-between",
       }}
     >
+      {confirmed ? (
+        <div>
+          <h2>Confirm Ride</h2>
+          <p>
+            Ride Cost: USh{" "}
+            <span style={{ fontSize: "24px" }}>{cost && <>{cost}</>}</span>{" "}
+            <span style={{ color: "lightgray" }}>{"cash only"}</span>
+          </p>
+          <p style={{ padding: "0px" }}>Distance: {distance && <>{distance} km</>}</p>
+          <img src={scooter} style={{ width: "10rem", right: 0 }} />
+        </div>
+      ) : (
+        <div>
+          <p>Pickup Location :</p>
+          <p>{shortUserlocation}</p>
+          <br />
+          <p>Destination :</p>
+          {selectedLocation && (
+            <p>
+              {selectedLocation.name}, {selectedLocation.address}
+            </p>
+          )}
+        </div>
+      )}
       <div>
-        <p>Confirm Ride</p>
-        <p>
-          Boda: USh <span style={{ fontSize: "24px" }}>5,400</span>{" "}
-          <span style={{ color: "lightgray" }}>{"cash only"}</span>
-        </p>
-        <img src={scooter} style={{ width: "10rem" }} />
-      </div>
-      <div>
-        <TouchableOpacity
-          style={{
-            width: "100%",
-            height: "4rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "limegreen",
-            marginbottom: "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <p style={{ color: "#fff" }}>Confirm Location</p>
-        </TouchableOpacity>
+        {confirmed ? (
+          <>
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                height: "4rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "limegreen",
+                marginbottom: "20px",
+                borderRadius: "40px",
+              }}
+            >
+              <p style={{ color: "#fff" }}>Order Ride</p>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <TouchableOpacity
+            onPress={() => setConfirmed(true)}
+            style={{
+              width: "100%",
+              height: "4rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "limegreen",
+              marginbottom: "20px",
+              borderRadius: "40px",
+            }}
+          >
+            <p style={{ color: "#fff" }}>Confirm Location</p>
+          </TouchableOpacity>
+        )}
         <br />
       </div>
     </div>
@@ -248,7 +304,17 @@ function SearchThing({ shortUserlocation, onLocationSelect }) {
   );
 }
 
-function MapElement({ lat1, lng1, selectedLocation }) {
+function MapElement({
+  lat1,
+  lng1,
+  selectedLocation,
+  confirmed,
+  setDistance,
+  setCost,
+}) {
+  const [directions, setDirections] = useState();
+  const [destinationCoord, setDestinationCoords] = useState();
+  const [map, setMap] = useState();
   const mapContainerRef = useRef();
   useEffect(() => {
     mapboxgl.accessToken =
@@ -260,8 +326,10 @@ function MapElement({ lat1, lng1, selectedLocation }) {
       zoom: 15, // Starting zoom level
       attributionControl: false,
     });
+    setMap(map);
     const startMarker = document.createElement("div");
-    ReactDOM.render(<OriginMarker />, startMarker);
+    const root = createRoot(startMarker);
+    root.render(<OriginMarker />);
     new mapboxgl.Marker(startMarker)
       .setLngLat({
         lng: lng1,
@@ -272,38 +340,14 @@ function MapElement({ lat1, lng1, selectedLocation }) {
     // Initialize the Mapbox Directions plugin
     const directions = new MapboxDirections({
       accessToken: mapboxgl.accessToken,
-      unit: "metric",
-      profile: "mapbox/driving", // You can change this to walking, cycling, etc.
-      controls: {
-        instructions: false, // Disable instruction panel
-      },
+      profile: "mapbox/walking", // You can change this to walking, cycling, etc.
+      alternatives: false,
+      geometries: "geojson",
+      controls: { instructions: false, inputs: false },
     });
 
-    map.addControl(directions, "top-left");
-
-    // Add the route line style
-    map.on("load", () => {
-      // Add a new layer to the map to style the route
-      map.addLayer({
-        id: "route",
-        type: "line",
-        source: "directions",
-        alternatives: false,
-        profile: "mapbox/driving-traffic",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "pink", // Color of the line
-          "line-width": 8, // Width of the line
-          "line-opacity": 0.8, // Opacity of the line
-          "line-border-width": 0,
-          "fill-color": "red",
-          "line-border-color": "transparent",
-        },
-      });
-    });
+    map.addControl(directions);
+    setDirections(directions);
 
     // If a destination is selected, set the origin and destination
     if (selectedLocation) {
@@ -311,31 +355,52 @@ function MapElement({ lat1, lng1, selectedLocation }) {
       const lat = selectedLocation.location.lat;
       const lng = selectedLocation.location.lng;
 
+      setDestinationCoords([lng, lat]);
+
       const stopMarker = document.createElement("div");
-      ReactDOM.render(<DestinationMarker />, stopMarker);
+      const root = createRoot(stopMarker);
+      root.render(<DestinationMarker />);
       new mapboxgl.Marker(stopMarker)
         .setLngLat({
           lng: lng,
           lat: lat,
         })
         .addTo(map);
-
-      // Set the origin to user's location and destination to the selected location
-      directions.setOrigin([lng1, lat1]); // User's current location
-      directions.setDestination([lng, lat]); // Selected location
-
-      // Optionally fit the bounds to show both the user's location and the destination
-      map.fitBounds(
-        [
-          [lng1, lat1], // User's location
-          [lng, lat], // Selected location
-        ],
-        { padding: 100 }
-      );
+      map.flyTo({ center: [lng, lat], zoom: 15 });
     }
     // Clean up on unmount
     return () => map.remove();
   }, [lat1, lng1, selectedLocation]);
+  useEffect(() => {
+    if (confirmed === true) {
+      // Set the origin to user's location and destination to the selected location
+      directions.setOrigin([lng1, lat1]); // User's current location
+      directions.setDestination(destinationCoord); // Selected location
+      // Optionally fit the bounds to show both the user's location and the destination
+      map.fitBounds(
+        [
+          [lng1, lat1], // User's location
+          [destinationCoord[0], destinationCoord[1]], // Selected location
+        ],
+        { padding: 100 }
+      );
+      directions.on("route", (e) => {
+        const route = e.route[0];
+        console.log("Route:", route); // Check route object
+
+        if (route && route.distance) {
+          const distance = (route.distance / 1000).toFixed(2);
+          console.log(`Distance: ${distance} km`);
+          const cost = (Math.ceil(distance) * 500).toLocaleString();
+          console.log(`cost is Ugx ${cost}Shs.`);
+          setCost(cost);
+          setDistance(distance);
+        } else {
+          console.log("Route or distance is undefined");
+        }
+      });
+    }
+  }, [confirmed]);
   return (
     <>
       <div id="map" ref={mapContainerRef} style={{ height: "60vh" }}></div>
@@ -349,14 +414,14 @@ function MapElement({ lat1, lng1, selectedLocation }) {
 function OriginMarker() {
   return (
     <div className="start">
-      <MdTripOrigin size={24} color="#fff"/>
+      <MdTripOrigin size={24} color="#fff" />
     </div>
   );
 }
 function DestinationMarker() {
   return (
     <div className="stop">
-      <MdLocationOn size={24} color="#fff"/>
+      <MdLocationOn size={24} color="#fff" />
     </div>
   );
 }
