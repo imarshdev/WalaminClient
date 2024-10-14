@@ -284,11 +284,13 @@ export function Navigator() {
 
 export const NewRideNot = () => {
   const { userData, setUserData } = useContext(UserContext);
-  const { riderData, setRiderData } = useContext(RiderContext);
+  const { riderData } = useContext(RiderContext);
   const [newRide, setNewRide] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("Rider data: ", riderData);
+    console.log("Rider data: General", riderData);
+    console.log("Rider data: Available", riderData.available);
+    console.log("Rider data: Status", riderData.rideStatus);
   }, []);
 
   useEffect(() => {
@@ -302,7 +304,6 @@ export const NewRideNot = () => {
     socket.on("pendingRides", (data) => {
       console.log("data received", data);
       console.log("data received", data.length);
-      setRiderData(data.length);
     });
     return () => {
       socket.off("pendingRides");
@@ -316,7 +317,7 @@ export const NewRideNot = () => {
           id="notification"
           onPress={() => navigate("/driver-rides")}
         >
-          <span style={{ color: "green" }}>{riderData}</span>
+          <span style={{ color: "green" }}>{riderData.available}</span>
         </TouchableOpacity>
       ) : (
         <></>

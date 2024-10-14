@@ -61,7 +61,10 @@ function Account() {
       <br />
       <div className="account-options">
         <p style={{ width: "100%", textAlign: "start" }}>Your account</p>
-        <TouchableOpacity id="account-option">
+        <TouchableOpacity
+          id="account-option"
+          onPress={() => navigate("/ridereq")}
+        >
           <span>
             <SlCalender style={{ marginRight: "1rem" }} />
             Scheduled rides

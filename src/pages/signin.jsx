@@ -9,9 +9,11 @@ import "../css/signin.css";
 import { TouchableOpacity } from "react-native-web";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
+import { RiderContext } from "../context/riderContext";
 
 function Signin() {
   const { userData, setUserData } = useContext(UserContext);
+  const { riderData, setRiderData } = useContext(RiderContext);
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [contact, setContact] = useState();
@@ -59,6 +61,7 @@ function Signin() {
         vehicleColor: "",
         isRider: false,
       });
+      setRiderData({ available: 0, rideStatus: "" });
       setLoading(true);
       setError("");
     } else {
