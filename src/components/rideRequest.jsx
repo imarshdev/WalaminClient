@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import useLocalStorageState from "../../useLocalStorage";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import scooter from "../assets/scooter.jpg";
@@ -19,24 +18,15 @@ function truncateText(text, length) {
 }
 
 export default function RideRequest() {
-  const [userLat, setUserLat] = useLocalStorageState("userLat", "");
-  const [userLng, setUserLng] = useLocalStorageState("userLng", "");
-  const [shortUserlocation, setShortUserlocation] = useLocalStorageState(
-    "shortUserlocation",
-    ""
-  );
-  const [userLocation, setUserLocation] = useLocalStorageState(
-    "userLocation",
-    ""
-  );
-  const [open, setOpen] = useLocalStorageState("open", true);
-  const [confirmed, setConfirmed] = useLocalStorageState("confirmed", false);
-  const [selectedLocation, setSelectedLocation] = useLocalStorageState(
-    "selectedLocation",
-    ""
-  );
-  const [distance, setDistance] = useLocalStorageState("distance", "");
-  const [cost, setCost] = useLocalStorageState("cost", "");
+  const [userLat, setUserLat] = useState();
+  const [userLng, setUserLng] = useState();
+  const [shortUserlocation, setShortUserlocation] = useState();
+  const [userLocation, setUserLocation] = useState();
+  const [open, setOpen] = useState(true);
+  const [confirmed, setConfirmed] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState();
+  const [distance, setDistance] = useState();
+  const [cost, setCost] = useState();
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
@@ -120,9 +110,7 @@ function ConfirmDialog({
             <span style={{ fontSize: "24px" }}>{cost && <>{cost}</>}</span>{" "}
             <span style={{ color: "lightgray" }}>{"cash only"}</span>
           </p>
-          <p style={{ padding: "0px" }}>
-            Distance: {distance && <>{distance} km</>}
-          </p>
+          <p style={{ padding: "0px" }}>Distance: {distance && <>{distance} km</>}</p>
           <img src={scooter} style={{ width: "10rem", right: 0 }} />
         </div>
       ) : (
@@ -184,16 +172,10 @@ function ApiCalls() {
 }
 
 function SearchThing({ shortUserlocation, onLocationSelect }) {
-  const [open, setOpen] = useLocalStorageState("open", true);
-  const [inputValue, setInputValue] = useLocalStorageState("inputValue", "");
-  const [filteredLocations, setFilteredLocations] = useLocalStorageState(
-    "filteredLocations",
-    []
-  );
-  const [locationItem, setLocationItem] = useLocalStorageState(
-    "locationItem",
-    ""
-  );
+  const [open, setOpen] = useState(true);
+  const [inputValue, setInputValue] = useState("");
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  const [locationItem, setLocationItem] = useState();
   useEffect(() => {
     if (inputValue) {
       const results = locationsData.filter((location) =>
@@ -330,97 +312,95 @@ function MapElement({
   setDistance,
   setCost,
 }) {
-  const [directions, setDirections] = useState(); // Do not save this in local storage
-  const [destinationLat, setDestinationLat] = useLocalStorageState(
-    "destinationLat",
-    0
-  );
-  const [destinationLng, setDestinationLng] = useLocalStorageState(
-    "destinationLng",
-    0
-  );
+  const [directions, setDirections] = useState();
+  const [destinationCoord, setDestinationCoords] = useState();
+  const [map, setMap] = useState();
   const mapContainerRef = useRef();
-
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1IjoiaW1hcnNoIiwiYSI6ImNtMDZiZDB2azB4eDUyanM0YnVhN3FtZzYifQ.gU1K02oIfZLWJRGwnjGgCg";
-
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng1, lat1],
-      zoom: 15,
+      style: "mapbox://styles/mapbox/streets-v11", // Map style
+      center: [lng1, lat1], // Starting position [lng, lat]
+      zoom: 15, // Starting zoom level
       attributionControl: false,
     });
-
-    // Initialize markers
+    setMap(map);
     const startMarker = document.createElement("div");
     const root = createRoot(startMarker);
     root.render(<OriginMarker />);
-    new mapboxgl.Marker(startMarker).setLngLat([lng1, lat1]).addTo(map);
+    new mapboxgl.Marker(startMarker)
+      .setLngLat({
+        lng: lng1,
+        lat: lat1,
+      })
+      .addTo(map);
 
     // Initialize the Mapbox Directions plugin
-    const directionsControl = new MapboxDirections({
+    const directions = new MapboxDirections({
       accessToken: mapboxgl.accessToken,
-      profile: "mapbox/walking",
+      profile: "mapbox/walking", // You can change this to walking, cycling, etc.
       alternatives: false,
       geometries: "geojson",
       controls: { instructions: false, inputs: false },
     });
 
-    map.addControl(directionsControl);
-    setDirections(directionsControl);
+    map.addControl(directions);
+    setDirections(directions);
 
-    // If a destination is selected, update the map
+    // If a destination is selected, set the origin and destination
     if (selectedLocation) {
+      console.log(selectedLocation);
       const lat = selectedLocation.location.lat;
       const lng = selectedLocation.location.lng;
 
-      setDestinationLat(lat);
-      setDestinationLng(lng);
+      setDestinationCoords([lng, lat]);
 
       const stopMarker = document.createElement("div");
-      const rootStop = createRoot(stopMarker);
-      rootStop.render(<DestinationMarker />);
-      new mapboxgl.Marker(stopMarker).setLngLat([lng, lat]).addTo(map);
+      const root = createRoot(stopMarker);
+      root.render(<DestinationMarker />);
+      new mapboxgl.Marker(stopMarker)
+        .setLngLat({
+          lng: lng,
+          lat: lat,
+        })
+        .addTo(map);
       map.flyTo({ center: [lng, lat], zoom: 15 });
     }
-
-    if (confirmed && directionsControl) {
+    // Clean up on unmount
+    return () => map.remove();
+  }, [lat1, lng1, selectedLocation]);
+  useEffect(() => {
+    if (confirmed === true) {
       // Set the origin to user's location and destination to the selected location
-      directionsControl.setOrigin([lng1, lat1]);
-      directionsControl.setDestination([destinationLng, destinationLat]);
-
+      directions.setOrigin([lng1, lat1]); // User's current location
+      directions.setDestination(destinationCoord); // Selected location
       // Optionally fit the bounds to show both the user's location and the destination
       map.fitBounds(
         [
-          [lng1, lat1],
-          [destinationLng, destinationLat],
+          [lng1, lat1], // User's location
+          [destinationCoord[0], destinationCoord[1]], // Selected location
         ],
         { padding: 100 }
       );
-
-      directionsControl.on("route", (e) => {
+      directions.on("route", (e) => {
         const route = e.route[0];
+        console.log("Route:", route); // Check route object
+
         if (route && route.distance) {
-          const distance = (route.distance / 1000).toFixed(2); // Convert to km
+          const distance = (route.distance / 1000).toFixed(2);
+          console.log(`Distance: ${distance} km`);
           const cost = (Math.ceil(distance) * 500).toLocaleString();
+          console.log(`cost is Ugx ${cost}Shs.`);
           setCost(cost);
           setDistance(distance);
         } else {
-          console.error("Route or distance is undefined");
+          console.log("Route or distance is undefined");
         }
       });
     }
-
-    // Cleanup on unmount
-    return () => map.remove();
-  }, [lat1, lng1, selectedLocation, confirmed, directions, destinationLng, destinationLat]);
-
-  useEffect(() => {
-
-  }, [confirmed, directions, lat1, lng1, destinationLng, destinationLat]);
-
+  }, [confirmed]);
   return (
     <>
       <div id="map" ref={mapContainerRef} style={{ height: "60vh" }}></div>
