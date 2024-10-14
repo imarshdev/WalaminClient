@@ -12,6 +12,8 @@ import { MdCircle, MdLocationOn, MdTripOrigin } from "react-icons/md";
 import { TouchableOpacity } from "react-native-web";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import { FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { RiArrowLeftLine } from "react-icons/ri";
 
 function truncateText(text, length) {
   return text.substring(0, length) + (text.length > length ? "…" : "");
@@ -27,6 +29,8 @@ export default function RideRequest() {
   const [selectedLocation, setSelectedLocation] = useState();
   const [distance, setDistance] = useState();
   const [cost, setCost] = useState();
+  const navigate = useNavigate();
+  const back = () => navigate("/");
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
@@ -81,6 +85,9 @@ export default function RideRequest() {
           cost={cost}
         />
       </BottomSheet>
+      <TouchableOpacity onPress={back} id="go-back">
+        <RiArrowLeftLine color="black" size={25} />
+      </TouchableOpacity>
     </div>
   );
 }
