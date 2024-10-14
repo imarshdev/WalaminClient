@@ -21,6 +21,7 @@ function Account() {
   };
   const confirmedLogout = () => {
     clearStorage();
+    localStorage.clear();
     navigate("/signin");
   };
 
@@ -184,7 +185,7 @@ export function Navigator() {
 }
 
 function CaptainReg({ setVisible2 }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [code, setCode] = useState("");
   const codeRef = useRef();
   useEffect(() => {
@@ -194,7 +195,7 @@ function CaptainReg({ setVisible2 }) {
       console.log(`typing ${code}`);
       if (code.length === 10 && code === "1213142122") {
         console.log("reached");
-        navigate("/riderSignUp")
+        navigate("/riderSignUp");
       } else {
         console.log("almost there");
       }
