@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import scooter from "../assets/scooter.jpg";
@@ -14,12 +14,14 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine } from "react-icons/ri";
+import { RiderContext } from "../context/riderContext";
 
 function truncateText(text, length) {
   return text.substring(0, length) + (text.length > length ? "…" : "");
 }
 
 export default function RideRequest() {
+  const { riderData, setRiderData } = useContext(RiderContext);
   const [userLat, setUserLat] = useState(
     () => localStorage.getItem("userLat") || null
   );
@@ -131,8 +133,14 @@ export default function RideRequest() {
     setCost(null);
     setOpen(true);
 
+    // reset ridestatus
+    setRiderData({ available: 0, rideStatus: "" });
     // Optionally, refresh the page
     window.location.reload();
+  };
+
+  const orderRide = () => {
+    setRiderData({ available: 0, rideStatus: "ridesent" });
   };
 
   return (
@@ -160,6 +168,8 @@ export default function RideRequest() {
           distance={distance}
           cost={cost}
           reset={reset}
+          setRiderData={setRiderData}
+          orderRide={orderRide}
         />
       </BottomSheet>
       <TouchableOpacity onPress={back} id="go-back">
@@ -177,6 +187,8 @@ function ConfirmDialog({
   distance,
   cost,
   reset,
+  setRiderData,
+  orderRide,
 }) {
   return (
     <div
@@ -238,6 +250,7 @@ function ConfirmDialog({
               <p style={{ color: "#fff" }}>Cancel</p>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={orderRide}
               style={{
                 width: "60%",
                 height: "3.5rem",
@@ -254,7 +267,10 @@ function ConfirmDialog({
           </div>
         ) : (
           <TouchableOpacity
-            onPress={() => setConfirmed(true)}
+            onPress={() => {
+              setConfirmed(true);
+              setRiderData({ available: 0, rideStatus: "processing" });
+            }}
             style={{
               width: "100%",
               height: "4rem",

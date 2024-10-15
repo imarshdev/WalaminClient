@@ -9,7 +9,7 @@ import shopping from "../assets/shopping.svg";
 import { FaHome, FaServicestack, FaUserAstronaut } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { CiDeliveryTruck } from "react-icons/ci";
-import { MdSchedule, MdSell,  } from "react-icons/md";
+import { MdSchedule, MdSell } from "react-icons/md";
 import { UserContext } from "../context/userContext";
 import { RiderContext } from "../context/riderContext";
 
@@ -18,6 +18,7 @@ const socket = io("https://walaminserver.onrender.com");
 function Home() {
   const linkToShare = "https://walamin-client.onrender.com";
   const { userData, setUserData } = useContext(UserContext);
+  const { riderData } = useContext(RiderContext);
   const [greeting, setGreeting] = useState();
   const [currentTimeString, setCurrentTimeString] = useState(new Date());
   const navigate = useNavigate();
@@ -149,7 +150,21 @@ function Home() {
           <button id="service_item">
             <Link id="link_item" to="/riderequest">
               <CiDeliveryTruck size={34} color="#ffc107" />
-              <p style={{ fontSize: 14, margin: "1rem 0" }}>Delivery</p>
+              <p
+                style={{
+                  fontSize: 14,
+                  margin: "1rem 0",
+                  color: riderData.rideStatus === "processing" ? "orange" : "",
+                }}
+              >
+                {riderData.rideStatus === ""
+                  ? "Delivery"
+                  : riderData.rideStatus === "processing"
+                  ? "Processing"
+                  : riderData.rideStatus === "ridesent"
+                  ? "Waiting"
+                  : "hold"}
+              </p>
             </Link>
           </button>
 
