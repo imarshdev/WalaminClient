@@ -1,0 +1,332 @@
+To implement the requested features, we’ll need to make a few adjustments to your current code:
+
+	1.	Notify users after 1 minute if no rider accepts their ride.
+	2.	Save cardData.contact and cardData.username when saving a completed ride.
+	3.	Create an endpoint to emit completed rides for a specific username and contact.
+	4.	Create another endpoint to emit all completed rides.
+
+Steps to Implement:
+
+1. Notify Users After 1 Minute of No Ride Reaction
+
+We’ll use setTimeout to trigger a message to the sender if no one reacts (accepts) their ride within 1 minute. When a ride is accepted within the time frame, we’ll clear the timeout to prevent the message.
+
+Add the timeout mechanism inside the sendCard event handler:
+
+io.on("connection", (socket) => {
+  console.log(user connected: ${socket.id});
+
+  // Send all pending rides to the newly connected rider
+  const pendingRides = readFile(ridesFilePath).filter(
+    (ride) => ride.status === "pending"
+  );
+  socket.emit("pendingRides", pendingRides);
+
+  // Handle new ride emission
+  socket.on("sendCard", (cardData) => {
+    console.log(`New ride from ${socket.id}: `, cardData);
+
+    const ride = {
+      ...cardData,
+      status: "pending",
+      sender: socket.id,
+      timestamp: new Date().toISOString(),
+    };
+
+    const rides = readFile(ridesFilePath);
+    rides.push(ride);
+    writeFile(ridesFilePath, rides);
+
+    io.emit("recieveCard", ride);
+
+    // Set a 1-minute timeout to notify the sender if no rider reacts
+    const notificationTimeout = setTimeout(() => {
+      const updatedRides = readFile(ridesFilePath);
+      const rideStillPending = updatedRides.find(
+        (r) => r.sender === socket.id && r.status === "pending"
+      );
+      if (rideStillPending) {
+        io.to(socket.id).emit("noRiderAvailable", {
+          message: "We are sorry, no rider available at this time.",
+        });
+      }
+    }, 60000); // 1 minute in milliseconds
+
+    // Store timeout in the ride object (we'll cancel it if someone reacts)
+    ride.notificationTimeout = notificationTimeout;
+  });
+
+  // Handle ride reaction (acceptance)
+  socket.on("reaction", ({ cardSender, reaction, reactorName }) => {
+    console.log(
+      Reaction from ${reactorName.userName}: accepted ${cardSender}'s ride
+    );
+
+    const rides = readFile(ridesFilePath);
+    const rideIndex = rides.findIndex((ride) => ride.sender === cardSender);
+
+    if (rideIndex !== -1) {
+      // Cancel the notification timeout since the ride has been accepted
+      clearTimeout(rides[rideIndex].notificationTimeout);
+
+      // Update ride status to accepted
+      rides[rideIndex].status = "accepted";
+      rides[rideIndex].acceptedBy = reactorName;
+      writeFile(ridesFilePath, rides);
+    }
+
+    io.to(cardSender).emit("notifyReaction", {
+      message: reactorName,
+    });
+  });
+  
+  // Other code remains the same...
+});
+
+2. Save cardData.contact and cardData.username in Completed Rides
+
+Update the updateRideStatus function to include cardData.contact and cardData.username when moving the ride to the completed_rides.json file:
+
+socket.on("updateRideStatus", ({ cardSender, status, reactorName }) => {
+  console.log(${reactorName.userName} updated the ride status to ${status});
+
+  const rides = readFile(ridesFilePath);
+  const rideIndex = rides.findIndex((ride) => ride.sender === cardSender);
+
+  if (rideIndex !== -1) {
+    if (status === "Ride Ended" || status === "Ride Cancelled") {
+      // Move ride to completed/cancelled rides and delete from current rides
+      const completedRides = readFile(completedRidesFilePath);
+      const completedRide = {
+        ...rides[rideIndex],
+        contact: rides[rideIndex].contact, // Include contact
+        username: rides[rideIndex].username, // Include username
+        status,
+        completedBy: reactorName,
+        completedAt: new Date().toISOString(),
+        type: status === "Ride Ended" ? "completed" : "cancelled",
+      };
+      completedRides.push(completedRide);
+      writeFile(completedRidesFilePath, completedRides);
+
+      // Remove the ride from active rides
+      rides.splice(rideIndex, 1);
+      writeFile(ridesFilePath, rides);
+
+      // Emit the new completed ride to the user
+      io.to(cardSender).emit("newCompletedRide", completedRide);
+    } else {
+      // Just update the status if it's not ending/cancelling the ride
+      rides[rideIndex].status = status;
+      writeFile(ridesFilePath, rides);
+    }
+  }
+
+  io.to(cardSender).emit("rideStatusUpdate", {
+    message: ${reactorName.userName} has updated the ride status to: ${status},
+    status,
+    reactorDetails: reactorName,
+  });
+});
+
+3. Endpoint to Emit Completed Rides for a Specific User
+
+We’ll create an endpoint that emits completed rides for a specific username and contact. The server will read the completed_rides.json file and filter the rides based on these values:
+
+app.get("/completed-rides", (req, res) => {
+  const { username, contact } = req.query;
+  const completedRides = readFile(completedRidesFilePath);
+
+  const userRides = completedRides.filter(
+    (ride) => ride.username === username && ride.contact === contact
+  );
+
+  res.json(userRides);
+});
+
+4. Endpoint to Emit All Completed Rides
+
+We’ll create another endpoint that returns all rides from the completed_rides.json file:
+
+app.get("/all-completed-rides", (req, res) => {
+  const completedRides = readFile(completedRidesFilePath);
+  res.json(completedRides);
+});
+
+Final Code with New Features:
+
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const dotenv = require("dotenv");
+const fs = require("fs");
+const path = require("path");
+
+dotenv.config();
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+// Path to ride data files
+const ridesFilePath = path.join(__dirname, "rides.json");
+const completedRidesFilePath = path.join(__dirname, "completed_rides.json");
+
+// Helper functions
+const readFile = (filePath) => {
+  if (!fs.existsSync(filePath)) return [];
+  const data = fs.readFileSync(filePath);
+  return JSON.parse(data);
+};
+
+const writeFile = (filePath, data) => {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+};
+
+// Store the initial state of rides if the file doesn't exist
+if (!fs.existsSync(ridesFilePath)) {
+  writeFile(ridesFilePath, []);
+}
+
+app.get("/", (req, res) => {
+  res.send("socket.IO server is running");
+});
+
+io.on("connection", (socket) => {
+  console.log(user connected: ${socket.id});
+
+  const pendingRides = readFile(ridesFilePath).filter(
+    (ride) => ride.status === "pending"
+  );
+  socket.emit("pendingRides", pendingRides);
+
+  socket.on("sendCard", (cardData) => {
+    const ride = {
+      ...cardData,
+      status: "pending",
+      sender: socket.id,
+      timestamp: new Date().toISOString(),
+    };
+
+    const rides = readFile(ridesFilePath);
+    rides.push(ride);
+    writeFile(ridesFilePath, rides);
+
+    io.emit("recieveCard", ride);
+
+    // Notify after 1 minute if no rider accepts
+    const notificationTimeout = setTimeout(() => {
+      const updatedRides = readFile(ridesFilePath);
+      const rideStillPending = updatedRides.find(
+        (r) => r.sender === socket.id && r.status === "pending"
+      );
+      if (rideStillPending) {
+        io.to(socket.id).emit("noRiderAvailable", {
+          message: "We are sorry, no rider available at this time.",
+        });
+      }
+    }, 60000);
+
+    ride.notificationTimeout = notificationTimeout;
+  });
+
+  socket.on("reaction", ({ cardSender, reaction, reactorName }) => {
+    const rides = readFile(ridesFilePath);
+    const rideIndex = rides.findIndex((ride) => ride.sender === cardSender);
+
+    if (rideIndex !== -1) {
+      clearTimeout(rides[rideIndex].notificationTimeout);
+
+      rides[rideIndex].status = "accepted";
+      rides[rideIndex].acceptedBy = reactorName;
+      writeFile(ridesFilePath, rides);
+    }
+
+    io.to(cardSender).emit("notifyReaction", {
+      message: reactorName,
+    });
+  });
+
+  socket.on("updateRideStatus", ({ cardSender, status, reactorName }) => {
+    const rides = readFile(ridesFilePath);
+    const rideIndex = rides.findIndex((ride) => ride.sender === cardSender);
+
+    It seems like the response got cut off. Here’s the continuation and finalization of the updateRideStatus logic and the rest of the code:
+
+    if (rideIndex !== -1) {
+      if (status === "Ride Ended" || status === "Ride Cancelled") {
+        // Move ride to completed/cancelled rides and delete from current rides
+        const completedRides = readFile(completedRidesFilePath);
+        const completedRide = {
+          ...rides[rideIndex],
+          contact: rides[rideIndex].contact,  // Include contact
+          username: rides[rideIndex].username,  // Include username
+          status,
+          completedBy: reactorName,
+          completedAt: new Date().toISOString(),
+          type: status === "Ride Ended" ? "completed" : "cancelled",
+        };
+        completedRides.push(completedRide);
+        writeFile(completedRidesFilePath, completedRides);
+
+        // Remove the ride from active rides
+        rides.splice(rideIndex, 1);
+        writeFile(ridesFilePath, rides);
+
+        // Emit the new completed ride to the user
+        io.to(cardSender).emit("newCompletedRide", completedRide);
+      } else {
+        // Just update the status if it's not ending/cancelling the ride
+        rides[rideIndex].status = status;
+        writeFile(ridesFilePath, rides);
+      }
+    }
+
+    io.to(cardSender).emit("rideStatusUpdate", {
+      message: ${reactorName.userName} has updated the ride status to: ${status},
+      status,
+      reactorDetails: reactorName,
+    });
+  });
+
+  socket.on("disconnect", () => {
+    console.log(user ${socket.id} disconnected);
+  });
+});
+
+// Emit completed rides for a specific user by username and contact
+app.get("/completed-rides", (req, res) => {
+  const { username, contact } = req.query;
+  const completedRides = readFile(completedRidesFilePath);
+
+  const userRides = completedRides.filter(
+    (ride) => ride.username === username && ride.contact === contact
+  );
+
+  res.json(userRides);
+});
+
+// Emit all completed rides
+app.get("/all-completed-rides", (req, res) => {
+  const completedRides = readFile(completedRidesFilePath);
+  res.json(completedRides);
+});
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(server listening on port http://localhost:${PORT});
+});
+
+Summary of Changes:
+
+	1.	Timeout Notification: If no one reacts to a ride within 1 minute, the user who sent the ride will receive a message saying, “We are sorry, no rider available at this time.”
+	2.	Saving Contact and Username: When saving a completed or cancelled ride, the ride now includes contact and username.
+	3.	New Endpoints:
+	•	/completed-rides: Fetches completed rides for a specific username and contact.
+	•	/all-completed-rides: Fetches all completed rides.
+
+With this code, your server will now notify users when a ride hasn’t been accepted after 1 minute, handle ride completions, and provide the requested endpoints for retrieving completed ride data.

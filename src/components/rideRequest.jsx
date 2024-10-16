@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import "./rides.css";
+import { Sidebar } from "primereact/sidebar";
 import mapboxgl from "mapbox-gl";
 import scooter from "../assets/scooter.jpg";
 import { createRoot } from "react-dom/client";
@@ -15,6 +17,11 @@ import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { RiderContext } from "../context/riderContext";
+import { UserContext } from "../context/userContext";
+// socket connection
+import io from "socket.io-client";
+import { GiFullMotorcycleHelmet } from "react-icons/gi";
+const socket = io("https://walaminserver.onrender.com");
 
 function truncateText(text, length) {
   return text.substring(0, length) + (text.length > length ? "…" : "");
@@ -22,6 +29,37 @@ function truncateText(text, length) {
 
 export default function RideRequest() {
   const { riderData, setRiderData } = useContext(RiderContext);
+  const { userData, setUserData } = useContext(UserContext);
+  const username = userData.firstName;
+  const contact = userData.contact;
+  const [location, setLocation] = useState();
+  const [noride, setNoride] = useState(() => {
+    const savedNoride = localStorage.getItem("noride");
+    return savedNoride ? JSON.parse(savedNoride) : false; // assuming default is false
+  });
+
+  const [rideAccepted, setRideAccepted] = useState(() => {
+    const savedRideAccepted = localStorage.getItem("rideAccepted");
+    return savedRideAccepted ? JSON.parse(savedRideAccepted) : false; // assuming default is false
+  });
+
+  const [incomingRider, setIncomingRider] = useState(() => {
+    const savedIncomingRider = localStorage.getItem("incomingRider");
+    return savedIncomingRider ? JSON.parse(savedIncomingRider) : {}; // assuming default is null
+  });
+
+  useEffect(() => {
+    localStorage.setItem("noride", JSON.stringify(noride));
+  }, [noride]);
+
+  useEffect(() => {
+    localStorage.setItem("rideAccepted", JSON.stringify(rideAccepted));
+  }, [rideAccepted]);
+
+  useEffect(() => {
+    localStorage.setItem("incomingRider", JSON.stringify(incomingRider));
+  }, [incomingRider]);
+
   const [userLat, setUserLat] = useState(
     () => localStorage.getItem("userLat") || null
   );
@@ -34,7 +72,9 @@ export default function RideRequest() {
   const [userLocation, setUserLocation] = useState(
     () => localStorage.getItem("userLocation") || null
   );
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(
+    () => JSON.parse(localStorage.getItem("open")) || true
+  );
   const [confirmed, setConfirmed] = useState(
     () => JSON.parse(localStorage.getItem("confirmed")) || false
   ); // confirmation status
@@ -45,7 +85,31 @@ export default function RideRequest() {
   const [distance, setDistance] = useState(
     () => localStorage.getItem("distance") || null
   );
+  const [rideStatus, setRideStatus] = useState(
+    () => localStorage.getItem("rideStatus") || null
+  );
   const [cost, setCost] = useState(() => localStorage.getItem("cost") || null);
+
+  // New state for the second bottom sheet
+  const [waitingOpen, setWaitingOpen] = useState(
+    () => JSON.parse(localStorage.getItem("waitingOpen")) || false
+  );
+
+  const [visible, setVisible] = useState(
+    () => JSON.parse(localStorage.getItem("visible")) || false
+  );
+
+  useEffect(() => {
+    if (waitingOpen) {
+      localStorage.setItem("waitingOpen", JSON.stringify(waitingOpen));
+    }
+  }, [waitingOpen]);
+
+  useEffect(() => {
+    if (visible) {
+      localStorage.setItem("visible", JSON.stringify(visible));
+    }
+  }, [visible]);
 
   const navigate = useNavigate();
   const back = () => navigate("/");
@@ -90,6 +154,7 @@ export default function RideRequest() {
         "selectedLocation",
         JSON.stringify(selectedLocation)
       );
+      setLocation(selectedLocation);
     }
   }, [selectedLocation]);
 
@@ -100,6 +165,12 @@ export default function RideRequest() {
   }, [distance]);
 
   useEffect(() => {
+    if (rideStatus) {
+      localStorage.setItem("rideStatus", rideStatus);
+    }
+  }, [rideStatus]);
+
+  useEffect(() => {
     if (cost) {
       localStorage.setItem("cost", cost);
     }
@@ -108,6 +179,10 @@ export default function RideRequest() {
   useEffect(() => {
     localStorage.setItem("confirmed", confirmed);
   }, [confirmed]);
+
+  useEffect(() => {
+    localStorage.setItem("open", open);
+  }, [open]);
 
   // Function to reset all state and localStorage
   const reset = () => {
@@ -121,6 +196,12 @@ export default function RideRequest() {
     localStorage.removeItem("distance");
     localStorage.removeItem("cost");
     localStorage.removeItem("searchOpen");
+    localStorage.removeItem("waitingOpen");
+    localStorage.removeItem("incomingRider");
+    localStorage.removeItem("rideAccepted");
+    localStorage.removeItem("noride");
+    localStorage.removeItem("rideStatus");
+    localStorage.removeItem("visible");
 
     // Reset all states
     setUserLat(null);
@@ -132,19 +213,133 @@ export default function RideRequest() {
     setDistance(null);
     setCost(null);
     setOpen(true);
+    setWaitingOpen(false); // Open the new bottom sheet
+    setIncomingRider(null);
+    setRideAccepted(false);
+    setRideStatus(null);
+    setVisible(false);
 
     // reset ridestatus
     setRiderData({ available: 0, rideStatus: "" });
     // Optionally, refresh the page
     window.location.reload();
+    console.log("items have been reset");
   };
 
-  const orderRide = () => {
-    setRiderData({ available: 0, rideStatus: "ridesent" });
+  const done = () => {
+    reset();
   };
+
+  useEffect(() => {
+    if (cost) {
+      console.log(`username: ${username}`);
+      console.log(`contact: ${contact}`);
+      console.log(`userLat: ${userLat}`);
+      console.log(`userLng: ${userLng}`);
+      console.log(`shortUserlocation: ${shortUserlocation}`);
+      console.log(`userLocation: ${userLocation}`);
+      console.log(`location: ${JSON.stringify(location)}`);
+      console.log(`cost: ${cost}`);
+    }
+  });
+
+  const orderRide = () => {
+    setOpen(false); // Close the first bottom sheet
+    setWaitingOpen(true); // Open the new bottom sheet
+    setRiderData({ available: 0, rideStatus: "ridesent" });
+    const cardData = {
+      username,
+      contact,
+      userLat,
+      userLng,
+      shortUserlocation,
+      userLocation,
+      location,
+      cost,
+      senderId: socket.id,
+    };
+    socket.emit("sendCard", cardData);
+    console.log("socket sent");
+  };
+
+  useEffect(() => {
+    socket.on("rideTimeout", ({ message }) => {
+      console.log(`message: ${message}`);
+      setNoride(true);
+      setRiderData({ available: 0, rideStatus: "" });
+    });
+  });
+
+  useEffect(() => {
+    socket.on("notifyReaction", ({ message }) => {
+      console.log("result received", message);
+      setIncomingRider(message);
+      setRideAccepted(true);
+    });
+    return () => {
+      socket.off("notifyReaction");
+    };
+  });
+
+  useEffect(() => {
+    // Listen for ride status updates if needed (optional)
+    socket.on("rideStatusUpdate", ({ message, status, reactorDetails }) => {
+      // Handle the incoming ride status update
+      console.log(message);
+      setRideStatus(status);
+      if (status === "Ride Ended") {
+        setVisible(true);
+      }
+    });
+
+    return () => {
+      socket.off("rideStatusUpdate");
+    };
+  });
+
+  useEffect(() => {
+    // Listen for ride status updates if needed (optional)
+    socket.on("rideStatusUpdate", (data) => {
+      // Handle the incoming ride status update
+      console.log("Ride status updated:", data);
+    });
+
+    return () => {
+      socket.off("rideStatusUpdate");
+    };
+  }, []);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
+      <Sidebar
+        fullScreen
+        style={{ width: "100%", height: "100vh" }}
+        visible={visible}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff",
+          }}
+        >
+          <h1>Price to Pay</h1>
+          <br />
+          <span>ugx, {cost} shs.</span>
+          <br />
+          <button style={{ width: "70%" }} onClick={done}>
+            <p>Collected</p>
+          </button>
+        </div>
+      </Sidebar>
       {userLat && userLng && (
         <MapElement
           lat1={userLat}
@@ -172,13 +367,107 @@ export default function RideRequest() {
           orderRide={orderRide}
         />
       </BottomSheet>
+      {/* New BottomSheet for Waiting */}
+      <BottomSheet open={waitingOpen} blocking={false}>
+        {rideAccepted ? (
+          <RideAccepted
+            rideStatus={rideStatus}
+            reset={reset}
+            incomingRider={incomingRider}
+          />
+        ) : (
+          <div
+            style={{
+              height: "43vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {noride ? (
+              <p>We are sorry, no rider available at this time.</p>
+            ) : (
+              <p>waiting for rider...</p>
+            )}
+            <TouchableOpacity
+              onPress={() => reset()}
+              style={{
+                width: "75%",
+                height: "3.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "orange",
+                marginbottom: "20px",
+                borderRadius: "20px",
+              }}
+            >
+              <p style={{ color: "#fff" }}>Cancel Ride</p>
+            </TouchableOpacity>
+          </div>
+        )}
+      </BottomSheet>
+      <ApiCalls orderRide={orderRide} />
       <TouchableOpacity onPress={back} id="go-back">
         <RiArrowLeftLine color="black" size={25} />
       </TouchableOpacity>
     </div>
   );
 }
-
+function RideAccepted({ incomingRider, reset, rideStatus }) {
+  return (
+    <div
+      style={{
+        height: "43vh",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "start",
+      }}
+    >
+      {rideStatus === null ? (
+        <p>Your rider {incomingRider.lastName} is on his way</p>
+      ) : rideStatus === "Arrived" ? (
+        <p>Your rider has arrived</p>
+      ) : rideStatus === "Started" ? (
+        <p>Your Ride Has Started, Safe Journy</p>
+      ) : rideStatus === "Ride Ended" ? (
+        <p>Your Ride has Ended</p>
+      ) : (
+        <p>An Error has occured</p>
+      )}
+      <span>
+        {incomingRider.userName} {incomingRider.lastName}
+      </span>
+      <span>{incomingRider.brand}</span>
+      <span>
+        {incomingRider.plate} {incomingRider.color}
+      </span>
+      <br />
+      <TouchableOpacity
+        style={{ width: "100%", backgroundColor: "limegreen" }}
+        id="rideAccepted"
+      >
+        <p>Call</p>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ width: "100%", backgroundColor: "lightblue" }}
+        id="rideAccepted"
+      >
+        <p>Chat with!!</p>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={reset}
+        style={{ width: "100%", backgroundColor: "orange" }}
+        id="rideAccepted"
+      >
+        <p>Cancel Ride</p>
+      </TouchableOpacity>
+    </div>
+  );
+}
 function ConfirmDialog({
   selectedLocation,
   shortUserlocation,
@@ -290,8 +579,16 @@ function ConfirmDialog({
     </div>
   );
 }
-function ApiCalls() {
-  useEffect(() => {});
+function ApiCalls({ orderRide }) {
+  useEffect(() => {
+    socket.on("rideStatusUpdate", (data) => {
+      console.log("status updated");
+      console.log("status updated:", data.status);
+    });
+    return () => {
+      socket.off("rideStatusUpdate");
+    };
+  });
   return;
 }
 
@@ -537,6 +834,13 @@ function DestinationMarker() {
   return (
     <div className="stop">
       <MdLocationOn size={24} color="#fff" />
+    </div>
+  );
+}
+function RiderMarker() {
+  return (
+    <div className="start">
+      <GiFullMotorcycleHelmet size={30} color="#fff" />
     </div>
   );
 }
