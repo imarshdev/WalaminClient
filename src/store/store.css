@@ -54,7 +54,11 @@
     margin-right: 10px;
     aspect-ratio: 2/1;
     border-radius: 20px;
-    background-color: limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
+    overflow: hidden;
+}
+.carousel-item-image{
+    width: 100%;
 }
 
 .categories-carousel {
@@ -70,7 +74,7 @@
     aspect-ratio: 4/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     display: flex;
     justify-content: center;
     align-items: start;
@@ -83,7 +87,7 @@
     aspect-ratio: 4/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     display: flex;
     justify-content: center;
     align-items: start;
@@ -113,7 +117,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
 }
 
 #new-items1 {
@@ -121,7 +125,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     margin-left: 20px;
 }
 
@@ -133,6 +137,7 @@
     overflow-y: scroll;
     display: flex;
     scrollbar-width: none;
+    padding-bottom: 5px;
 }
 
 .recommended-carousel {
@@ -145,7 +150,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     display: flex;
     justify-content: center;
     align-items: start;
@@ -158,7 +163,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     display: flex;
     justify-content: center;
     align-items: start;
@@ -172,7 +177,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px limegreen;
+    border: solid 1px rgba(50, 205, 50, 0.342);
     display: flex;
     justify-content: center;
     align-items: start;

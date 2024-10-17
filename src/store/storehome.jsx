@@ -1,6 +1,11 @@
 import React, { useContext, useState } from "react";
 import { TouchableOpacity } from "react-native-web";
 import "./store.css";
+import image1 from "./imgs/img1.jpg";
+import image2 from "./imgs/img2.jpg";
+import image3 from "./imgs/img3.jpg";
+import image4 from "./imgs/img4.jpg";
+import image5 from "./imgs/img5.jpg";
 import { UserContext } from "../context/userContext";
 import {
   BiCart,
@@ -30,13 +35,14 @@ export default function StoreHome() {
               </TouchableOpacity>
             </p>
             <div className="top-carousel">
-              <TouchableOpacity
-                id="carousel-item"
-                style={{ marginLeft: "20px" }}
-              ></TouchableOpacity>
-              <TouchableOpacity id="carousel-item"></TouchableOpacity>
-              <TouchableOpacity id="carousel-item"></TouchableOpacity>
-              <TouchableOpacity id="carousel-item"></TouchableOpacity>
+              {CarouseImages.map((item, index) => (
+                <TouchableOpacity
+                  id="carousel-item"
+                  style={{ marginLeft: "20px" }}
+                >
+                  <img src={item} className="carousel-item-image" />
+                </TouchableOpacity>
+              ))}
             </div>
             <p>Categories</p>
             <div className="categories-carousel">
@@ -133,16 +139,18 @@ function Back() {
       onPress={() => navigate("/")}
       id="go-back"
       style={{
-        backgroundColor: "#eff2fb49",
         transform: "rotate(90deg",
-        position: "fixed"
+        position: "fixed",
+        top: "0px",
+        border: "solid 1px lightgreen",
       }}
     >
-      <RiArrowTurnBackLine />
+      <RiArrowTurnBackLine color="green" />
     </TouchableOpacity>
   );
 }
 
+const CarouseImages = [image1, image2, image3, image4, image5];
 const Categories = [
   {
     category: "Food & Beverages",
