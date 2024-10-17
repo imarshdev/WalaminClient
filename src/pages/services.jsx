@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/services.css";
-import { FaHome, FaServicestack } from "react-icons/fa";
+import { FaHome, FaServicestack, FaWarehouse } from "react-icons/fa";
 import { TouchableOpacity } from "react-native-web";
 import { Link } from "react-router-dom";
 
@@ -75,8 +75,8 @@ function AllServices() {
           style={{ marginTop: "20px", padding: "10px" }}
         >
           <Link id="link_item">
-            <MdPayments size={34} color="8bc34a" />
-            <p style={{ color: "#333333" }}>E pay</p>
+            <FaWarehouse size={34} color="8bc34a" />
+            <p style={{ color: "#333333" }}>the Outlet</p>
           </Link>
         </button>
 
@@ -189,64 +189,6 @@ function AllServices() {
           <Link id="link_item">
             <GiHouse size={34} color="#98ff98" />
             <p style={{ color: "#663300" }}>Rentals & Houses</p>{" "}
-          </Link>
-        </button>
-
-        {/* send money button */}
-        <button
-          id="service_item"
-          style={{ marginTop: "20px", padding: "10px" }}
-        >
-          <Link id="link_item">
-            <MdEvent size={34} color="8e24aa" />
-            <p style={{ color: "" }}>Events</p>{" "}
-          </Link>
-        </button>
-
-        <button id="service_item" style={{ padding: "10px" }}>
-          <Link id="link_item">
-            <GiMedicalPack size={34} color="#6495ed" />
-            <p style={{ color: "#330000" }}>Medicare & Pharmaceuticals</p>{" "}
-          </Link>
-        </button>
-
-        {/* withdrawal button */}
-        <button
-          id="service_item"
-          style={{ marginTop: "20px", padding: "10px" }}
-        >
-          <Link id="link_item">
-            <RiAuctionLine size={34} color="#ffd700" />
-            <p style={{ color: "#663300" }}>Auction House</p>{" "}
-          </Link>
-        </button>
-
-        {/* send money button */}
-        <button
-          id="service_item"
-          style={{ marginTop: "20px", padding: "10px" }}
-        >
-          <Link id="link_item">
-            <MdEvent size={34} color="8e24aa" />
-            <p style={{ color: "" }}>Events</p>{" "}
-          </Link>
-        </button>
-
-        <button id="service_item" style={{ padding: "10px" }}>
-          <Link id="link_item">
-            <GiMedicalPack size={34} color="#6495ed" />
-            <p style={{ color: "#330000" }}>Medicare & Pharmaceuticals</p>{" "}
-          </Link>
-        </button>
-
-        {/* withdrawal button */}
-        <button
-          id="service_item"
-          style={{ marginTop: "20px", padding: "10px" }}
-        >
-          <Link id="link_item">
-            <RiAuctionLine size={34} color="#ffd700" />
-            <p style={{ color: "#663300" }}>Auction House</p>{" "}
           </Link>
         </button>
 
