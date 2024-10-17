@@ -194,7 +194,7 @@ function Home() {
 
           {/* shopping button */}
           <button id="service_item">
-            <Link id="link_item">
+            <Link id="link_item" to="/store">
               <img src={shopping} style={{ width: "30px" }} />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Shopping</p>{" "}
             </Link>

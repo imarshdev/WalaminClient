@@ -12,6 +12,8 @@ import {
 import CheckOut from "./checkout";
 import Favourites from "./favourites";
 import Notifications from "./notifications";
+import { RiArrowTurnBackLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 export default function StoreHome() {
   const { userData } = useContext(UserContext);
@@ -83,6 +85,7 @@ export default function StoreHome() {
       {page === "favourites" && <Favourites />}
       {page === "notifications" && <Notifications />}
       <StoreNavigator setPage={setPage} page={page} />
+      <Back />
     </>
   );
 }
@@ -120,6 +123,23 @@ function StoreNavigator({ setPage, page }) {
         <BiNotification size={24} color="green" />
       </TouchableOpacity>
     </div>
+  );
+}
+
+function Back() {
+  const navigate = useNavigate();
+  return (
+    <TouchableOpacity
+      onPress={() => navigate("/")}
+      id="go-back"
+      style={{
+        backgroundColor: "#eff2fb49",
+        transform: "rotate(90deg",
+        position: "fixed"
+      }}
+    >
+      <RiArrowTurnBackLine />
+    </TouchableOpacity>
   );
 }
 
