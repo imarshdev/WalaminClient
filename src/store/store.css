@@ -74,7 +74,7 @@
     aspect-ratio: 4/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px rgba(50, 205, 50, 0.342);
+    background-color: lightgreen;
     display: flex;
     justify-content: center;
     align-items: start;
@@ -87,7 +87,7 @@
     aspect-ratio: 4/1;
     margin-right: 10px;
     border-radius: 20px;
-    border: solid 1px rgba(50, 205, 50, 0.342);
+    background-color: lightgreen;
     display: flex;
     justify-content: center;
     align-items: start;

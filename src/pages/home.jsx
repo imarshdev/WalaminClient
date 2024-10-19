@@ -148,7 +148,7 @@ function Home() {
           </h2>
           {/* delivery button */}
           <button id="service_item">
-            <Link id="link_item" to="/riderequest">
+            <Link id="link_item" to="/">
               <CiDeliveryTruck size={34} color="#ffc107" />
               <p
                 style={{
@@ -170,7 +170,7 @@ function Home() {
 
           {/* express ride button */}
           <button id="service_item">
-            <Link id="link_item" to="/ride-request">
+            <Link id="link_item" to="/riderequest">
               <GiFullMotorcycleHelmet size={34} color="#0097a7" />
               <p style={{ fontSize: 14, margin: "1rem 0" }}>Express</p>
             </Link>
@@ -228,7 +228,6 @@ function Home() {
             </div>
             <Link
               id="link_item"
-              to="/ride-request"
               style={{
                 justifyContent: "space-between",
                 display: "flex",

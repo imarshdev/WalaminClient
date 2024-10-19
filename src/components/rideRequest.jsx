@@ -228,6 +228,7 @@ export default function RideRequest() {
 
   const done = () => {
     reset();
+    navigate("/");
   };
 
   useEffect(() => {
@@ -690,7 +691,7 @@ function SearchThing({ shortUserlocation, onLocationSelect }) {
             autoFocus
             value={inputValue}
             onChange={inputChanging}
-            style={{ width: "100%", paddingLeft: "20px", color: "black"}}
+            style={{ width: "100%", paddingLeft: "20px", color: "black" }}
             placeholder="Search for a location..."
           />
         </div>

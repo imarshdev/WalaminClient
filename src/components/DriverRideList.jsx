@@ -125,6 +125,23 @@ export default function DriverRideList() {
     };
   }, []); // Runs once on mount
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("This runs every 5 seconds");
+      const handlePendingRides = (data) => {
+        console.log(`Received pending rides data: ${JSON.stringify(data)}`);
+        setRideData(data); // Append new rides if needed
+      };
+      socket.on("pendingRides", handlePendingRides);
+      return () => {
+        socket.off("pendingRides", handlePendingRides);
+      };
+    }, 5000);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures it
+
   const reset = () => {
     localStorage.removeItem("selectedRide");
     localStorage.removeItem("riderLat");
